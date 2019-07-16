@@ -33,8 +33,23 @@ $video_dir .= "/$DATE/$HOUR";
 $all_videos = glob("$video_dir/*.mp4");
 foreach($all_videos as $index => $vid){
     $vid_name = basename($vid);
-    echo "<h2><a href='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name</a> (54.55 MB)</h2>";
+    echo "<h2><a href='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name</a> (".HumanSize(filesize($vid)).")</h2>";
 }
 
 echo '</body></html>';
+?>
+
+
+<?php
+function HumanSize($Bytes)
+{
+  $Type=array("", "KB", "MB", "GB", "TB", "PB", "exa", "zetta", "yotta");
+  $Index=0;
+  while($Bytes>=1024)
+  {
+    $Bytes/=1024;
+    $Index++;
+  }
+  return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
+}
 ?>

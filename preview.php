@@ -30,7 +30,7 @@ if($int_hour!="00"){
 if($int_hour!="23"){
     echo "<div style='float: right'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour&tag=$TAG'> Next</a> ($next_hour hour)</div>";
 }
-echo "<div style='margin: auto; width: 250px;'><a href='../../../GateVideos/2019-07-13/05hour'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR&tag=$TAG'>$other_cam</a></div></h2>";
+echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR&tag=$TAG'>$other_cam</a></div></h2>";
 
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $photo_dir .= "/$DATE/$HOUR";
