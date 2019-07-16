@@ -44,6 +44,8 @@ def runOnDirectory(root_dir,date,hour):
     log_message("Running on.. "+cur_dir)
     remove_duplicates(cur_dir)
     images = get_files(cur_dir, "jpg")
+    if os.path.exists(tar_dir):
+        shutil.rmtree(tar_dir)
     for x in images:
         try:
             img = cv2.imread(cur_dir+"/"+x)
@@ -51,16 +53,12 @@ def runOnDirectory(root_dir,date,hour):
         except Exception as e:
             print("Error reading file:"+x)
             continue
-
         boxes, scores, classes, num = odapi.processFrame(img)
-
-        # Visualization of the results of a detection.
 
         for i in range(len(boxes)):
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
-                if not os.path.exists(tar_dir):
-                    os.mkdir(tar_dir)
+                ensure_dir_exists(tar_dir)
                 thumbnail = os.path.join(cur_dir,"thumbnails",x)
                 if os.path.exists(thumbnail):
                     os.symlink(thumbnail,tar_dir+"/"+x)
@@ -68,10 +66,7 @@ def runOnDirectory(root_dir,date,hour):
                     img = cv2.resize(img, (400, 225))
                     cv2.imwrite(tar_dir+"/"+x, img)
                 break
-                #box = boxes[i]
-                #cv2.rectangle(img,(box[1],box[0]),(box[3],box[2]),(255,0,0),2)
 
-        #cv2.imwrite("/home/pi/face/out/"+x, img)
     return len(images)
 
 if not check_hdd():
