@@ -19,10 +19,10 @@ echo '<body>';
 echo '<h2><h2>';
 
 if($int_hour!="00"){
-    echo "<div style='float: left'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$prev_hour"."hour'> Previous</a> (18hour)</div>";
+    echo "<div style='float: left'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$prev_hour"."hour'> Previous</a> ($prev_hour hour)</div>";
 }
 if($int_hour!="23"){
-    echo "<div style='float: right'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour'> Next</a> (20hour)</div>";
+    echo "<div style='float: right'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour'> Next</a> ($next_hour hour)</div>";
 }
 
 echo "<div style='margin: auto; width: 250px;'>";
