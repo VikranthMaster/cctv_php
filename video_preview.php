@@ -14,7 +14,7 @@ $other_cam = $CAMERA=="Gate"? "Stairs" : "Gate";
 
 echo '<html>';
 echo "<title>$CAMERA Videos ($DATE) ($HOUR)</title>";
-echo "<head><h1><center><a href='../../../'>$CAMERA Videos</a>&nbsp<a href='../'>($DATE)</a> ($HOUR) </a></center></h1></head>";
+echo "<head><h1><center><a href='../../../'>$CAMERA Videos</a>&nbsp<a href='./videos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR) </a></center></h1></head>";
 echo '<body>';
 echo '<h2><h2>';
 
