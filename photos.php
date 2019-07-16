@@ -15,8 +15,12 @@ $date_dirs = array_filter(glob($photo_dir."/$DATE/*"), 'is_dir');
 arsort($date_dirs);
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
-    $p_images = glob("$v/*.jpg");
-    $o_images = glob("$v/thumbnails/*.jpg");
+    $p_images = [];
+    if(file_exists("$v/persons")){
+        $p_images = glob("$v/persons/*.jpg");
+    }
+    $all_images = glob("$v/*.jpg");
+    $o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
     if(count($p_images)!=0){
 	echo "<h2>$hour&emsp;<A href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour&tag=person'>Person images(".count($p_images).")</A>&emsp;<A href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour&tag=other'> Other Images (".count($o_images).")</A></h2>";
     }
