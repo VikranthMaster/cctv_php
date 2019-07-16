@@ -11,11 +11,11 @@ arsort($date_dirs);
 
 echo '<html>';
 echo "<title>$CAMERA Videos ($DATE)</title>";
-echo "<head><h1><center><a href="../../">GateVideos</a> ($DATE) </a></center></h1></head>";
+echo "<head><h1><center><a href='../../'>GateVideos</a> ($DATE) </a></center></h1></head>";
 echo '<body>';
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
-    echo "<h2><A href="./21hour">$hour</A> (4 Videos)</h2>";
+    echo "<h2><A href='./21hour'>$hour</A> (4 Videos)</h2>";
 }
 echo '</body>';
 echo '</html>';
