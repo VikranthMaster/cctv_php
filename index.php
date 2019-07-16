@@ -2,6 +2,9 @@
 $HDD_ROOT = "/mnt/hdd";
 $GATE_PHOTO_DIR = $HDD_ROOT."/GatePhotos";
 $STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
+$GATE_VIDEO_DIR = $HDD_ROOT."/GateVideos";
+$STAIRS_VIDEO_DIR = $HDD_ROOT."/StairsVideos";
+
 $free_space = HumanSize(disk_free_space($HDD_ROOT));
 $per_full = (1- disk_free_space($HDD_ROOT)/disk_total_space($HDD_ROOT))*100;
 $per_full = sprintf('%1.2f' , $per_full)
@@ -42,9 +45,22 @@ $per_full = sprintf('%1.2f' , $per_full)
 	    $v = basename($v);
             echo '<tr>';
 		echo "<td><h2><a href='./photos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-		echo "<td><h2><a href='./photos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
-		echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-		echo "<td><h2><a href='./videos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
+		if(file_exists("$STAIRS_PHOTO_DIR/$v")){
+		    echo "<td><h2><a href='./photos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
+		}else{
+		    echo "<td><h2>Not Available</h2></td>";
+		}
+		if(file_exists("$GATE_VIDEO_DIR/$v")){
+		    echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
+		}
+		}else{
+		    echo "<td><h2>Not Available</h2></td>";
+    	}
+    	if(file_exists("$STAIRS_VIDEO_DIR/$v")){
+    	    echo "<td><h2><a href='./videos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
+    	}else{
+    	    echo "<td><h2>Not Available</h2></td>";
+        }
 	    echo '</tr>';
 	}
 	?>
