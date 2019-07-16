@@ -52,7 +52,6 @@ $per_full = sprintf('%1.2f' , $per_full)
 		}
 		if(file_exists("$GATE_VIDEO_DIR/$v")){
 		    echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-		}
 		}else{
 		    echo "<td><h2>Not Available</h2></td>";
     	}
