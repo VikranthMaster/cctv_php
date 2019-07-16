@@ -1,0 +1,6 @@
+
+<html>
+<title>GateVideos (2019-07-15) (19hour)</title>
+<head><h1><center><a href="../../../">GateVideos</a>&nbsp<a href="../">(2019-07-15)</a> (19hour) </a></center></h1></head>
+<body>
+<h2><h2><div style="float: left"><a href="../18hour"> Previous</a> (18hour)</div><div style="float: right"><a href="../20hour"> Next</a> (20hour)</div><div style="margin: auto; width: 250px;"><a href="../../../GatePhotos/2019-07-15/19hour/persons">Photos</a>&emsp;&emsp;<a href="../../../StairsVideos/2019-07-15/19hour">Stairs</a></div></h2><h2><a href="./19.47.44-19.49.35[M][0@0][0].mp4">19.47.44-19.49.35[M][0@0][0].mp4</a> (54.55 MB)</h2><h2><a href="./19.09.55-19.10.19[M][0@0][0].mp4">19.09.55-19.10.19[M][0@0][0].mp4</a> (11.77 MB)</h2><h2><a href="./19.36.28-19.37.17[M][0@0][0].mp4">19.36.28-19.37.17[M][0@0][0].mp4</a> (24.37 MB)</h2><h2><a href="./19.23.31-19.23.54[M][0@0][0].mp4">19.23.31-19.23.54[M][0@0][0].mp4</a> (10.28 MB)</h2><h2><a href="./19.50.23-19.51.09[M][0@0][0].mp4">19.50.23-19.51.09[M][0@0][0].mp4</a> (21.74 MB)</h2></body></html>
