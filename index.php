@@ -2,8 +2,9 @@
 $HDD_ROOT = "/mnt/hdd";
 $GATE_PHOTO_DIR = $HDD_ROOT."/GatePhotos";
 $STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
-
-
+$free_space = HumanSize(disk_free_space($HDD_ROOT));
+$per_full = (1- disk_free_space($dir)/disk_total_space($dir))*100;
+$per_full = sprintf('%1.2f' , $per_full)
 ?>
 
 <html>
@@ -11,7 +12,7 @@ $STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
         <title>Narahari Home CCTV Monitoring System</title>
         <head><h1><center>Narahari Home CCTV Monitoring System</center></h1>
             <center><b>Last Updated on : <?php echo date("Y-m-d h:i:sa")?>
-		&emsp;Storage: <?php echo HumanSize(disk_free_space($HDD_ROOT))?> Available</b></center>
+		&emsp;Storage: <?php echo "$per_full Full, $free_space" ?> Available</b></center>
         </head>
         <style>
             table, th, td {
