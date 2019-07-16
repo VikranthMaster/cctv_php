@@ -1,9 +1,5 @@
 <?php
-$HDD_ROOT = "/mnt/hdd";
-$GATE_PHOTO_DIR = $HDD_ROOT."/GatePhotos";
-$STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
-$GATE_VIDEO_DIR = $HDD_ROOT."/GateVideos";
-$STAIRS_VIDEO_DIR = $HDD_ROOT."/StairsVideos";
+require 'vars.php';
 
 $free_space = HumanSize(disk_free_space($HDD_ROOT));
 $per_full = (1- disk_free_space($HDD_ROOT)/disk_total_space($HDD_ROOT))*100;
@@ -68,17 +64,3 @@ $per_full = sprintf('%1.2f' , $per_full)
         <h2><a href='./logs'> Logs </a></h2>
     </body>
 </html>
-
-<?php
-function HumanSize($Bytes)
-{
-  $Type=array("", "KB", "MB", "GB", "TB", "PB", "exa", "zetta", "yotta");
-  $Index=0;
-  while($Bytes>=1024)
-  {
-    $Bytes/=1024;
-    $Index++;
-  }
-  return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
-}
-?>

@@ -1,7 +1,5 @@
 <?php
-$HDD_ROOT = "/mnt/hdd";
-$GATE_VIDEO_DIR = $HDD_ROOT."/GateVideos";
-$STAIRS_VIDEO_DIR = $HDD_ROOT."/StairsVideos";
+require 'vars.php';
 
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
@@ -37,19 +35,4 @@ foreach($all_videos as $index => $vid){
 }
 
 echo '</body></html>';
-?>
-
-
-<?php
-function HumanSize($Bytes)
-{
-  $Type=array("", "KB", "MB", "GB", "TB", "PB", "exa", "zetta", "yotta");
-  $Index=0;
-  while($Bytes>=1024)
-  {
-    $Bytes/=1024;
-    $Index++;
-  }
-  return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
-}
 ?>

@@ -1,7 +1,5 @@
 <?php
-$HDD_ROOT = "/mnt/hdd";
-$GATE_PHOTO_DIR = $HDD_ROOT."/GatePhotos";
-$STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
+require 'vars.php';
 
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
