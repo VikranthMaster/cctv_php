@@ -16,7 +16,7 @@ echo '<body>';
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
     $all_videos = glob("$v/*.mp4");
-    echo "<h2><A href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$hour'>$hour</A> (".count($all_videos)"." Videos)</h2>";
+    echo "<h2><A href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$hour'>$hour</A> (".count($all_videos)." Videos)</h2>";
 }
 echo '</body>';
 echo '</html>';
