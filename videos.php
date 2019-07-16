@@ -19,3 +19,4 @@ foreach($date_dirs as $k => $v){
 }
 echo '</body>';
 echo '</html>';
+?>
