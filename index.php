@@ -12,7 +12,7 @@ $per_full = sprintf('%1.2f' , $per_full)
         <title>Narahari Home CCTV Monitoring System</title>
         <head><h1><center>Narahari Home CCTV Monitoring System</center></h1>
             <center><b>Last Updated on : <?php echo date("Y-m-d h:i:sa")?>
-		&emsp;Storage: <?php echo "$per_full Full, $free_space" ?> Available</b></center>
+		&emsp;Storage: <?php echo "$per_full % Full, $free_space" ?> Available</b></center>
         </head>
         <style>
             table, th, td {
