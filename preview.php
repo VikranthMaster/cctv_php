@@ -34,23 +34,23 @@ echo "<div style='margin: auto; width: 250px;'><a href='../../../GateVideos/2019
 
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $photo_dir .= "/$DATE/$HOUR";
-$p_images = glob("$photo_dir/*.jpg");
-$o_images = glob("$photo_dir/thumbnails/*.jpg");
+$p_images = [];
+if(file_exists("$photo_dir/persons")){
+    $p_images = array_map("basename",glob("$photo_dir/persons/*.jpg"));
+}
+$all_images = array_map("basename",glob("$photo_dir/*.jpg"));
 $images = [];
 if($TAG=="person"){
     $images = $p_images;
 }else{
-    $images = $o_images;
+    $images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
 }
-    
+
 foreach($images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
-    if($TAG=="person"){
-   	$img_link = "./$cam/$DATE/$HOUR/".basename($img);
-    }else{
-    	$img_link = "./$cam/$DATE/$HOUR/thumbnails/".basename($img);
-    }
-    echo "<a target='_blank' href='$img_link'><img src='$img_link' alt='Forest'></a>";
+    $img_link = "./$cam/$DATE/$HOUR/$img";
+    $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
+    echo "<a target='_blank' href='$img_link'><img src='$thumb_link' alt='Forest'></a>";
 }
 echo '</body>';
 echo '</html>';
