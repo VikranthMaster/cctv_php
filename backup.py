@@ -40,4 +40,4 @@ date = datetime.datetime.now() - datetime.timedelta(days=1)
 date = date.strftime("%Y-%m-%d")
 
 for i in range(0,2):
-    backup(os.path.join(photo_root_dirs[i],date))
+    backup(os.path.join(photo_root_dirs[i],date), tar_files[i])
