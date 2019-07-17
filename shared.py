@@ -139,7 +139,6 @@ def backup(root_dir,tar_file):
                 os.remove(os.path.join(target_dir,hour_dir,"thumbnails",p))
                 shutil.copy(os.path.join(root_dir,hour_dir,p),os.path.join(target_dir,hour_dir,p))
 
-    print("Creating tar file...")
     make_tarfile(tar_file,os.path.join(target_dir))
     shutil.rmtree(target_dir)
 
