@@ -28,7 +28,7 @@ $PROCESS_LOGS = $LOG_ROOT."/process";
 <?php
 $logs = glob("$PROCESS_LOGS/*.txt");
 arsort($logs);
-foreach($file as $k => $v){
+foreach($logs as $k => $v){
     $v = basename($v);
     $date = substr($v,4,10);
     echo '<tr>';
