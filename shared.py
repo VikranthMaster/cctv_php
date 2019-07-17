@@ -5,6 +5,7 @@ import datetime
 import shutil
 import cv2
 import numpy as np
+import tarfile
 
 photo_root_dirs = ["/mnt/hdd/GatePhotos", "/mnt/hdd/StairsPhotos"]
 video_root_dirs = ["/mnt/hdd/GateVideos", "/mnt/hdd/StairsVideos"]
@@ -117,3 +118,86 @@ def mse(imageA, imageB):
     # return the MSE, the lower the error, the more "similar"
     # the two images are
     return err
+
+def make_tarfile(output_filename, source_dir):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+def backup(root_dir,tar_file):
+    print("Backing up :"+root_dir)
+    target_dir = "/mnt/hdd/"+ os.path.basename(root_dir)
+    ensure_dir_exists(target_dir)
+    hours = get_sub_dirs(root_dir)
+    for hour_dir in hours:
+        ensure_dir_exists(os.path.join(target_dir,hour_dir))
+        person_dir = os.path.join(root_dir,hour_dir,"persons")
+        thumbnail_dir = os.path.join(root_dir,hour_dir,"thumbnails")
+        shutil.copytree(thumbnail_dir,os.path.join(target_dir,hour_dir,"thumbnails"))
+        if os.path.exists(person_dir):
+            person_list = get_files(person_dir,"jpg")
+            for p in person_list:
+                os.remove(os.path.join(target_dir,hour_dir,"thumbnails",p))
+                shutil.copy(os.path.join(root_dir,hour_dir,p),os.path.join(target_dir,hour_dir,p))
+
+    print("Creating tar file...")
+    make_tarfile(tar_file,os.path.join(target_dir))
+    shutil.rmtree(target_dir)
+
+def delete_old_footage():
+    expiry_date_dictionary = {
+        "/mnt/hdd/GatePhotos": 5,
+        "/mnt/hdd/StairsPhotos": 5,
+        "/mnt/hdd/GateVideos": 3,
+        "/mnt/hdd/StairsVideos": 3,
+        "/mnt/hdd/tmp/GateCamera": 0,
+        "/mnt/hdd/tmp/StairsCamera": 0
+    }
+
+    today = datetime.datetime.now().date()
+    for root_dir in expiry_date_dictionary:
+        expiry_date = expiry_date_dictionary[root_dir]
+        for dt_dir in get_sub_dirs(root_dir):
+            if dt_dir == "train":
+                continue
+            dt = datetime.datetime.strptime(dt_dir, "%Y-%m-%d").date()
+            elapsed_days = (today-dt).days
+            if elapsed_days > expiry_date:
+                try:
+                    shutil.rmtree(root_dir+"/"+dt_dir)
+                except:
+                    print("Error deleting directory:"+root_dir+"/"+dt_dir)
+
+
+def save_backups():
+    tar_files = ["/mnt/hdd/GatePhotos/gate.tar.gz", "/mnt/hdd/StairsPhotos/stairs.tar.gz"]
+
+    for tar_file in tar_files:
+        if os.path.exists(tar_file):
+            try:
+                os.remove(tar_file)
+            except:
+                pass
+
+    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    date = date.strftime("%Y-%m-%d")
+
+    for i in range(0,2):
+        backup(os.path.join(photo_root_dirs[i],date), tar_files[i])
+
+def save_space_main():
+    if not check_hdd():
+        exit(0)
+
+    past_time = datetime.datetime.now() - datetime.timedelta(days=1)
+    past_date = past_time.strftime("%Y-%m-%d")
+
+    for photo_root in photo_root_dirs:
+        date_dir = os.path.join(photo_root, past_date)
+        if os.path.exists(date_dir):
+            save_space_video(date_dir)
+            #save_space_image(date_dir)
+
+    for video_root in video_root_dirs:
+        date_dir = os.path.join(video_root,past_date)
+        if os.path.exists(date_dir):
+            save_video_space2(date_dir)
