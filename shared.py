@@ -154,6 +154,7 @@ def delete_old_footage():
     }
 
     today = datetime.datetime.now().date()
+    print("Deleting old footage...")
     for root_dir in expiry_date_dictionary:
         expiry_date = expiry_date_dictionary[root_dir]
         for dt_dir in get_sub_dirs(root_dir):
@@ -163,6 +164,7 @@ def delete_old_footage():
             elapsed_days = (today-dt).days
             if elapsed_days > expiry_date:
                 try:
+                    print("Deleting: "+root_dir+"/"+dt_dir)
                     shutil.rmtree(root_dir+"/"+dt_dir)
                 except:
                     print("Error deleting directory:"+root_dir+"/"+dt_dir)
