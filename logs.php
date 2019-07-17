@@ -32,9 +32,9 @@ foreach($logs as $k => $v){
     $v = basename($v);
     $date = substr($v,4,10);
     echo '<tr>';
-    echo "<td><h2><a href='./process/$v'> $date </a></h2></td>";
-    echo "<td><h2><a href='./person_detect/$v'> $date </a></h2></td>";
-    echo "<td><h2><a href='./temperature/$v'> $date </a></h2></td>";
+    echo "<td><h2><a href='./logs/process/$v'> $date </a></h2></td>";
+    echo "<td><h2><a href='./logs/person_detect/$v'> $date </a></h2></td>";
+    echo "<td><h2><a href='./logs/temperature/$v'> $date </a></h2></td>";
     echo '</tr>';
 }
 ?>
