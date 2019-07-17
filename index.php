@@ -61,6 +61,8 @@ $per_full = sprintf('%1.2f' , $per_full)
 	?>
         </table>
         <h2><a href='./logs/internet_autologin/log.txt'> Internet Autologin</a></h2>
+        <h2><a href='./logs/nightly/log.txt'> Nightly Log </a></h2>
         <h2><a href='./logs.php'> Logs </a></h2>
+
     </body>
 </html>
