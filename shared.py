@@ -127,7 +127,7 @@ def backup(root_dir):
     print("Backing up :"+root_dir)
     hours = get_sub_dirs(root_dir)
     for hour_dir in hours:
-        target_dir = os.path.basename(root_dir,hour_dir,hour_dir)
+        target_dir = os.path.join(root_dir,hour_dir,hour_dir)
         if os.path.exists(target_dir):
             shutil.rmtree(target_dir)
 
