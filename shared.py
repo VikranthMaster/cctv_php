@@ -123,24 +123,50 @@ def make_tarfile(output_filename, source_dir):
     with tarfile.open(output_filename, "w:gz") as tar:
         tar.add(source_dir, arcname=os.path.basename(source_dir))
 
-def backup(root_dir,tar_file):
+def backup(root_dir):
     print("Backing up :"+root_dir)
-    target_dir = "/mnt/hdd/"+ os.path.basename(root_dir)
-    ensure_dir_exists(target_dir)
     hours = get_sub_dirs(root_dir)
     for hour_dir in hours:
-        ensure_dir_exists(os.path.join(target_dir,hour_dir))
-        person_dir = os.path.join(root_dir,hour_dir,"persons")
-        thumbnail_dir = os.path.join(root_dir,hour_dir,"thumbnails")
-        shutil.copytree(thumbnail_dir,os.path.join(target_dir,hour_dir,"thumbnails"))
-        if os.path.exists(person_dir):
-            person_list = get_files(person_dir,"jpg")
-            for p in person_list:
-                os.remove(os.path.join(target_dir,hour_dir,"thumbnails",p))
-                shutil.copy(os.path.join(root_dir,hour_dir,p),os.path.join(target_dir,hour_dir,p))
+        target_dir = os.path.basename(root_dir,hour_dir,hour_dir)
+        if os.path.exists(target_dir):
+            shutil.rmtree(target_dir)
 
-    make_tarfile(tar_file,os.path.join(target_dir))
-    shutil.rmtree(target_dir)
+        ensure_dir_exists(target_dir)
+        print("Backing up :"+target_dir)
+
+        person_list = os.path.join(root_dir,hour_dir,"person.txt")
+        other_list = os.path.join(root_dir,hour_dir,"others.txt")
+
+        if not os.path.exists(person_list) or not os.path.exists(other_list):
+            continue
+
+        files_to_copy = []
+        files_to_copy.append(person_list)
+        files_to_copy.append(other_list)
+
+        # Add person images to list.
+        f = open(person_list)
+        while 1:
+            line = f.readline().rstrip()
+            if not line:
+                break
+            files_to_copy.append(os.path.join(root_dir,hour_dir,line))
+        f.close()
+
+        # Add other images to list.
+        f = open(other_list)
+        while 1:
+            line = f.readline().rstrip()
+            if not line:
+                break
+            files_to_copy.append(os.path.join(root_dir,hour_dir,"thumbnails",line))
+        f.close()
+
+        for file in files_to_copy:
+            shutil.copy2(file,target_dir)
+
+        make_tarfile(os.path.join(root_dir,hour_dir,hour_dir+".tar.gz"),target_dir)
+        #shutil.rmtree(target_dir)
 
 def delete_old_footage():
     expiry_date_dictionary = {
@@ -170,20 +196,10 @@ def delete_old_footage():
 
 
 def save_backups():
-    tar_files = ["/mnt/hdd/GatePhotos/gate.tar.gz", "/mnt/hdd/StairsPhotos/stairs.tar.gz"]
-
-    for tar_file in tar_files:
-        if os.path.exists(tar_file):
-            try:
-                os.remove(tar_file)
-            except:
-                pass
-
     date = datetime.datetime.now() - datetime.timedelta(days=1)
     date = date.strftime("%Y-%m-%d")
 
-    for i in range(0,2):
-        backup(os.path.join(photo_root_dirs[i],date), tar_files[i])
+    backup(os.path.join(photo_root_dirs[0],date))
 
 def save_space_main():
     if not check_hdd():
