@@ -2,4 +2,5 @@ from shared import *
 
 save_space_main()
 delete_old_footage()
-#save_backups()
+delete_backup()
+save_backups()

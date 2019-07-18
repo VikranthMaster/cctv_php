@@ -208,7 +208,7 @@ def save_backups():
         backup(os.path.join(photo_dir,date))
 
 def delete_backup():
-    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    date = datetime.datetime.now() - datetime.timedelta(days=2)
     date = date.strftime("%Y-%m-%d")
     print("Deleting backups on "+date)
     for tar in glob.iglob(os.path.join(photo_root_dirs[0],date) + '/**/*.tar.gz', recursive=True):
