@@ -165,8 +165,12 @@ def backup(root_dir):
         for file in files_to_copy:
             shutil.copy2(file,target_dir)
 
-        make_tarfile(os.path.join(root_dir,hour_dir,hour_dir+".tar.gz"),target_dir)
-        #shutil.rmtree(target_dir)
+        tarfile = os.path.join(root_dir,hour_dir,hour_dir+".tar.gz")
+        if os.path.exists(tarfile):
+            os.remove(tarfile)
+
+        make_tarfile(tarfile,target_dir)
+        shutil.rmtree(target_dir)
 
 def delete_old_footage():
     expiry_date_dictionary = {
@@ -199,7 +203,8 @@ def save_backups():
     date = datetime.datetime.now() - datetime.timedelta(days=1)
     date = date.strftime("%Y-%m-%d")
 
-    backup(os.path.join(photo_root_dirs[0],date))
+    for photo_dir in photo_root_dirs:
+        backup(os.path.join(photo_dir,date))
 
 def save_space_main():
     if not check_hdd():
