@@ -33,6 +33,12 @@ def remove_duplicates(cur_dir):
             print("Error deleting duplicate image:"+img)
     print("Total items to be deleted: %d out of %d" % (len(to_del),len(imgs)))
 
+def writeListToFile(list, file):
+    f = open(file, "w")
+    for elem in list:
+        f.write(elem+"\n")
+    f.close()
+
 def runOnDirectory(root_dir,date,hour):
     cur_dir = os.path.join(root_dir,date,hour)
     tar_dir = os.path.join(root_dir,date,hour,"persons")
@@ -44,6 +50,7 @@ def runOnDirectory(root_dir,date,hour):
     log_message("Running on.. "+cur_dir)
     remove_duplicates(cur_dir)
     images = get_files(cur_dir, "jpg")
+    p_images = []
     if os.path.exists(tar_dir):
         shutil.rmtree(tar_dir)
     for x in images:
@@ -59,6 +66,7 @@ def runOnDirectory(root_dir,date,hour):
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
                 ensure_dir_exists(tar_dir)
+                p_images.append(x)
                 thumbnail = os.path.join(cur_dir,"thumbnails",x)
                 if os.path.exists(thumbnail):
                     os.symlink(thumbnail,tar_dir+"/"+x)
@@ -66,6 +74,16 @@ def runOnDirectory(root_dir,date,hour):
                     img = cv2.resize(img, (400, 225))
                     cv2.imwrite(tar_dir+"/"+x, img)
                 break
+
+    person_txt = os.path.join(cur_dir,"person.txt")
+    writeListToFile(p_images,person_txt)
+
+    others_txt = os.path.join(cur_dir,"others.txt")
+    other_list = []
+    for img in images:
+        if img not in p_images:
+            other_list.append(img)
+    writeListToFile(other_list,others_txt)
 
     return len(images)
 
