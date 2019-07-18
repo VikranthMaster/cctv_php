@@ -6,6 +6,7 @@ import shutil
 import cv2
 import numpy as np
 import tarfile
+import glob
 
 photo_root_dirs = ["/mnt/hdd/GatePhotos", "/mnt/hdd/StairsPhotos"]
 video_root_dirs = ["/mnt/hdd/GateVideos", "/mnt/hdd/StairsVideos"]
@@ -205,6 +206,16 @@ def save_backups():
 
     for photo_dir in photo_root_dirs:
         backup(os.path.join(photo_dir,date))
+
+def delete_backup():
+    date = datetime.datetime.now() - datetime.timedelta(days=1)
+    date = date.strftime("%Y-%m-%d")
+    print("Deleting backups on "+date)
+    for tar in glob.iglob(os.path.join(photo_root_dirs[0],date) + '/**/*.tar.gz', recursive=True):
+        os.remove(tar)
+
+    for tar in glob.iglob(os.path.join(photo_root_dirs[1],date) + '/**/*.tar.gz', recursive=True):
+        os.remove(tar)
 
 def save_space_main():
     if not check_hdd():
