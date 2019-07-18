@@ -3,7 +3,7 @@ import urllib.request
 import time
 
 REMOTE_URL = "http://earwiggy-sealion-5900.dataplicity.io"
-LOCAL_PATH = "C:/Users/sgudla/Downloads/cctv"
+LOCAL_PATH = "/mnt/hdd"
 
 def getFootage(url, camera, date):
     date_url = url+"/"+camera+"/"+date
