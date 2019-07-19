@@ -39,16 +39,18 @@ if(file_exists("$photo_dir/persons")){
 $all_images = array_map("basename",glob("$photo_dir/*.jpg"));
 $images = [];
 if($TAG=="person"){
-    $images = $p_images;
+    $images = getPersonImages($photo_dir);
+    #$images = $p_images;
 }else{
-    $images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
+    $images = getOtherImages($photo_dir);
+    #$images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
 }
 
 foreach($images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
     $img_link = "./$cam/$DATE/$HOUR/$img";
     $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
-    echo "<a target='_blank' href='$img_link'><img src='$thumb_link' alt='Forest'></a>";
+    echo "<a target='_blank' href='$img_link'><img src='$img_link' alt='Forest'></a>";
 }
 echo '</body>';
 echo '</html>';
