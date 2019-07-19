@@ -175,8 +175,8 @@ def backup(root_dir):
 
 def delete_old_footage():
     expiry_date_dictionary = {
-        "/mnt/hdd/GatePhotos": 5,
-        "/mnt/hdd/StairsPhotos": 5,
+        "/mnt/hdd/GatePhotos": 8,
+        "/mnt/hdd/StairsPhotos": 8,
         "/mnt/hdd/GateVideos": 3,
         "/mnt/hdd/StairsVideos": 3,
         "/mnt/hdd/tmp/GateCamera": 0,
