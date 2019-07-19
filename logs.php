@@ -1,6 +1,6 @@
 <?php
 $LOG_ROOT = "/home/pi/www/logs";
-$PROCESS_LOGS = $LOG_ROOT."/temperature";
+$TEMPERATURE_LOGS = $LOG_ROOT."/temperature";
 ?>
 
 <html>
@@ -26,14 +26,22 @@ $PROCESS_LOGS = $LOG_ROOT."/temperature";
             </tr>
 
 <?php
-$logs = glob("$PROCESS_LOGS/*.txt");
+$logs = glob("$TEMPERATURE_LOGS/*.txt");
 arsort($logs);
 foreach($logs as $k => $v){
     $v = basename($v);
     $date = substr($v,4,10);
     echo '<tr>';
-    echo "<td><h2><a href='./logs/process/$v'> $date </a></h2></td>";
-    echo "<td><h2><a href='./logs/person_detect/$v'> $date </a></h2></td>";
+    if(file_exists($LOG_ROOT."/process/$v")) {
+        echo "<td><h2><a href='./logs/process/$v'> $date </a></h2></td>";
+    }else{
+        echo "<td><h2>Not Available</h2></td>";
+    }
+    if(file_exists($LOG_ROOT."/person_detect/$v")){
+        echo "<td><h2><a href='./logs/person_detect/$v'> $date </a></h2></td>";
+    }else{
+        echo "<td><h2>Not Available</h2></td>";
+    }
     echo "<td><h2><a href='./logs/temperature/$v'> $date </a></h2></td>";
     echo '</tr>';
 }
