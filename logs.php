@@ -1,6 +1,6 @@
 <?php
 $LOG_ROOT = "/home/pi/www/logs";
-$PROCESS_LOGS = $LOG_ROOT."/process";
+$PROCESS_LOGS = $LOG_ROOT."/temperature";
 ?>
 
 <html>
