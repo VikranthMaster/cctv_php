@@ -41,7 +41,7 @@ function getOtherImages($root_dir){
     if(file_exists("$root_dir/others.txt")){
         $other_file = fopen("$root_dir/others.txt","r");
         while(!feof($other_file)){
-            $line = fgets($other_file);
+            $line = rtrim(fgets($other_file));
             if($line!=''){
                 array_push($o_images,$line);
             }
