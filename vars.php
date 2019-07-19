@@ -7,30 +7,31 @@ $STAIRS_VIDEO_DIR = $HDD_ROOT."/StairsVideos";
 
 function HumanSize($Bytes)
 {
-  $Type=array("", "KB", "MB", "GB", "TB", "PB", "exa", "zetta", "yotta");
-  $Index=0;
-  while($Bytes>=1024)
-  {
-    $Bytes/=1024;
-    $Index++;
-  }
-  return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
+    $Type=array("", "KB", "MB", "GB", "TB", "PB", "exa", "zetta", "yotta");
+    $Index=0;
+    while($Bytes>=1024)
+    {
+        $Bytes/=1024;
+        $Index++;
+    }
+    return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
 }
 
 function getPersonImages($root_dir){
     $p_images = [];
     if(file_exists("$root_dir/person.txt")){
-	$person_file = fopen("$root_dir/person.txt","r");
-	while(!feof($person_file)){
-	    $line = fgets($person_file);
-	    if($line!=''){
-		array_push($p_images,$line);
-	    }
-	}
-	fclose($person_file);
+        $person_file = fopen("$root_dir/person.txt","r");
+        while(!feof($person_file)){
+            $line = fgets($person_file);
+            if($line!=''){
+                array_push($p_images,$line);
+            }
+        }
+        fclose($person_file);
     }
     if(file_exists("$root_dir/persons")){
         $p_images = glob("$root_dir/persons/*.jpg");
+        $p_images = array_map("basename",$p_images);
     }
     return $p_images;
 }
@@ -38,19 +39,19 @@ function getPersonImages($root_dir){
 function getOtherImages($root_dir){
     $o_images = [];
     if(file_exists("$root_dir/others.txt")){
-	$other_file = fopen("$root_dir/others.txt","r");
-	while(!feof($other_file)){
-	    $line = fgets($other_file);
-	    if($line!=''){
-		array_push($o_images,$line);
-	    }
-	}
-	fclose($other_file);
+        $other_file = fopen("$root_dir/others.txt","r");
+        while(!feof($other_file)){
+            $line = fgets($other_file);
+            if($line!=''){
+                array_push($o_images,$line);
+            }
+        }
+        fclose($other_file);
     }else{
-	$all_images = glob("$root_dir/*.jpg");
-	$p_images = getPersonImages($root_dir);
-	$o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
-	$o_images = array_map("basename",$o_images);
+        $all_images = glob("$root_dir/*.jpg");
+        $p_images = getPersonImages($root_dir);
+        $o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
+        $o_images = array_map("basename",$o_images);
     }
     return $o_images;
 }
