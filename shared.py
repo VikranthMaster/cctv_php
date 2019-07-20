@@ -125,6 +125,7 @@ def make_tarfile(output_filename, source_dir):
         tar.add(source_dir, arcname=os.path.basename(source_dir))
 
 def backup_hour(hour_dir):
+    print("Backing up :"+hour_dir)
     target_dir = os.path.join(hour_dir,os.path.basename(hour_dir))
     if os.path.exists(target_dir):
         shutil.rmtree(target_dir)
