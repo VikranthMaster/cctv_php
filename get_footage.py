@@ -1,9 +1,26 @@
 from shared import *
 import urllib.request
 import time
+from pytz import timezone
 
 REMOTE_URL = "http://earwiggy-sealion-5900.dataplicity.io"
 LOCAL_PATH = "/mnt/hdd"
+
+def getFootageHour(url,camera,date,hour):
+    ensure_dir_exists(os.path.join(LOCAL_PATH,camera,date))
+    date_url = url+"/"+camera+"/"+date
+    tar = date_url+"/"+hour+"/"+hour+".tar.gz"
+    print("Getting images on from: "+tar)
+    try:
+        tar_local = os.path.join(LOCAL_PATH,camera,date,hour+".tar.gz")
+        urllib.request.urlretrieve(tar, tar_local)
+        t = tarfile.open(tar_local)
+        t.extractall(os.path.join(LOCAL_PATH,camera,date))
+        t.close()
+        os.remove(tar_local)
+    except Exception as e:
+        print("Error getting tar file:"+tar)
+        print(e)
 
 def getFootage(url, camera, date):
     date_url = url+"/"+camera+"/"+date
@@ -25,10 +42,15 @@ def getFootage(url, camera, date):
             print(e)
 
 start_time = time.time()
-today = datetime.datetime.now().strftime("%Y-%m-%d")
-getFootage(REMOTE_URL,"GatePhotos", today)
-getFootage(REMOTE_URL,"StairsPhotos", today)
+india = timezone('Asia/Calcutta')
+lasthour = datetime.datetime.now(india)-datetime.timedelta(hours=1)
+date = lasthour.strftime("%Y-%m-%d")
+hour = '%02dhour'%(lasthour.hour)
+
+getFootageHour(REMOTE_URL,"GatePhotos", date,hour)
+getFootageHour(REMOTE_URL,"StairsPhotos", date,hour)
 
 total_time = time.time() - start_time
 str = ("Get Footage took %d minutes and %d seconds\n")%(total_time/60, total_time%60)
 print(str)
+addMarkerLine()
