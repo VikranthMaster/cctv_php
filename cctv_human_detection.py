@@ -41,7 +41,6 @@ def writeListToFile(list, file):
 
 def runOnDirectory(root_dir,date,hour):
     cur_dir = os.path.join(root_dir,date,hour)
-    tar_dir = os.path.join(root_dir,date,hour,"persons")
 
     if not os.path.exists(cur_dir):
         log_message("Directory does not exists: "+cur_dir)
@@ -51,8 +50,7 @@ def runOnDirectory(root_dir,date,hour):
     remove_duplicates(cur_dir)
     images = get_files(cur_dir, "jpg")
     p_images = []
-    if os.path.exists(tar_dir):
-        shutil.rmtree(tar_dir)
+
     for x in images:
         try:
             img = cv2.imread(cur_dir+"/"+x)
@@ -65,14 +63,7 @@ def runOnDirectory(root_dir,date,hour):
         for i in range(len(boxes)):
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
-                ensure_dir_exists(tar_dir)
                 p_images.append(x)
-                thumbnail = os.path.join(cur_dir,"thumbnails",x)
-                if os.path.exists(thumbnail):
-                    os.symlink(thumbnail,tar_dir+"/"+x)
-                else:
-                    img = cv2.resize(img, (400, 225))
-                    cv2.imwrite(tar_dir+"/"+x, img)
                 break
 
     person_txt = os.path.join(cur_dir,"person.txt")
@@ -84,7 +75,7 @@ def runOnDirectory(root_dir,date,hour):
         if img not in p_images:
             other_list.append(img)
     writeListToFile(other_list,others_txt)
-
+    backup_hour(cur_dir)
     return len(images)
 
 if not check_hdd():
