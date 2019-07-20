@@ -1,5 +1,5 @@
 <?php
-$LOG_ROOT = "/home/pi/www/logs";
+$LOG_ROOT = "/var/www/html/logs";
 $TEMPERATURE_LOGS = $LOG_ROOT."/temperature";
 ?>
 
