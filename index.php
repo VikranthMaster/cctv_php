@@ -1,4 +1,5 @@
 <?php
+require_once('authorize.php');
 require 'vars.php';
 
 $free_space = HumanSize(disk_free_space($HDD_ROOT));

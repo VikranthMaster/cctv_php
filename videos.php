@@ -1,4 +1,5 @@
 <?php
+require_once('authorize.php');
 require 'vars.php';
 
 $CAMERA = $_GET["camera"];

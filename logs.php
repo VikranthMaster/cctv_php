@@ -1,4 +1,5 @@
 <?php
+require_once('authorize.php');
 $LOG_ROOT = "/var/www/html/logs";
 $TEMPERATURE_LOGS = $LOG_ROOT."/temperature";
 ?>

@@ -1,6 +1,6 @@
 <?php
 require 'vars.php';
-
+require_once('authorize.php');
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
 $HOUR = $_GET["hour"];
