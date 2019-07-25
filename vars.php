@@ -33,7 +33,8 @@ function getPersonImages($root_dir){
         $p_images = glob("$root_dir/persons/*.jpg");
         $p_images = array_map("basename",$p_images);
     }
-    return asort($p_images);
+    sort($p_images);
+    return $p_images;
 }
 
 function getOtherImages($root_dir){
@@ -53,7 +54,9 @@ function getOtherImages($root_dir){
         $o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
         $o_images = array_map("basename",$o_images);
     }
-    return asort($o_images);
+
+    sort($o_images);
+    return $o_images;
 }
 
 ?>
