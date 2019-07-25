@@ -15,13 +15,13 @@ arsort($date_dirs);
     <style>
         div.gallery {
             margin: 5px;
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             float: left;
-            width: 180px;
+            width: 400px;
         }
 
         div.gallery:hover {
-            border: 1px solid #777;
+            border: 2px solid #777;
         }
 
         div.gallery img {
@@ -30,8 +30,11 @@ arsort($date_dirs);
         }
 
         div.desc {
-            padding: 15px;
+            font-size: larger;
+            font-weight: bolder;
+            padding: 10px;
             text-align: center;
+            background-color: #5DADE2;
         }
     </style>
 </head>

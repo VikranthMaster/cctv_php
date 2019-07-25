@@ -41,7 +41,7 @@ $HOUR = $_GET["hour"];
             display: block;
             float: left;
             margin: 0 5px 5px 0;
-            width: 400px;
+            width: 300px;
         }
         .my-gallery figcaption {
             display: none;
@@ -97,9 +97,9 @@ $all_images = array_merge($p_images,$o_images);
 sort($all_images);
 
 
-echo "<button class='tablink' onclick=\"openPage('Persons', this, 'green')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
-echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other (".count($o_images).") </button>\n";
-echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All (".count($all_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('Persons', this, '#5DADE2')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
+echo "<button class='tablink' onclick=\"openPage('Other', this, '#5DADE2')\">Other (".count($o_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\">All (".count($all_images).") </button>\n";
 
 echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
