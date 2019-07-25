@@ -98,7 +98,7 @@ sort($all_images);
 
 
 echo "<button class='tablink' onclick=\"openPage('Persons', this, 'green')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
-echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other (".count($p_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other (".count($o_images).") </button>\n";
 echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All (".count($all_images).") </button>\n";
 
 echo "<div id='Persons' class='tabcontent'>\n";
