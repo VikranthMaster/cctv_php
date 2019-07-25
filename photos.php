@@ -10,14 +10,14 @@ arsort($date_dirs);
 
 
 <html>
-<title>$CAMERA Photos ($DATE)</title>
+<title><?php echo "$CAMERA Photos ($DATE)"?></title>
 <head><h1><center><a href='./index.php'><?php echo $CAMERA ?>Photos</a> <?php echo "($DATE)"?> </a></center></h1>
     <style>
         div.gallery {
             margin: 5px;
             border: 2px solid #ccc;
             float: left;
-            width: 400px;
+            width: 300px;
         }
 
         div.gallery:hover {
@@ -67,7 +67,7 @@ foreach($date_dirs as $k => $v){
     }
 
     echo "<div class='gallery''>\n";
-    echo "<a target='_blank' href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
+    echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
     echo "<div class='desc'>$hour ( $p_count / $t_count ) </div>\n";
     echo "</div>\n";
 }
