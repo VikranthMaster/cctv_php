@@ -97,7 +97,7 @@ echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All</bu
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $photo_dir .= "/$DATE/$HOUR";
 $p_images = getPersonImages($photo_dir);
-$o_images = getPersonImages($photo_dir);
+$o_images = getOtherImages($photo_dir);
 $all_images = array_merge($p_images,$o_images);
 sort($all_images);
 
