@@ -22,7 +22,7 @@ function getPersonImages($root_dir){
     if(file_exists("$root_dir/person.txt")){
         $person_file = fopen("$root_dir/person.txt","r");
         while(!feof($person_file)){
-            $line = fgets($person_file);
+            $line = rtrim(fgets($person_file));
             if($line!=''){
                 array_push($p_images,$line);
             }
