@@ -49,10 +49,24 @@ foreach($date_dirs as $k => $v){
     $p_count = count($p_images);
     $t_count = count($all_images);
 
+    reset($p_images);
+    $img = current($p_images);
+    if($p_count==0){
+        reset($all_images);
+        $img = current($all_images);
+    }
+
+    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
+    $img_link = "./$cam/$DATE/$hour/$img";
+    $thumb_link = "./$cam/$DATE/$hour/thumbnails/$img";
+    if(!file_exists("$HDD_ROOT/$cam/$DATE/$hour/thumbnails/$img")){
+        $thumb_link = $img_link;
+    }
+
     echo "<div class='gallery''>\n";
-    echo "<a target='_blank' href='img_5terre.jpg'> <img src='img_5terre.jpg' alt='Cinque Terre' width='600' height='400'> </a>\n";
+    echo "<a target='_blank' href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
     echo "<div class='desc'>$hour ( $p_count / $t_count ) </div>\n";
-    echo '</div>\n';
+    echo "</div>\n";
 }
 ?>
 
