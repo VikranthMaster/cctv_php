@@ -3,25 +3,58 @@ require 'vars.php';
 require_once('authorize.php');
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
-
-echo '<html>';
-echo "<title>$CAMERA Photos ($DATE)</title>";
-echo "<head><h1><center><a href='./index.php'>$CAMERA Photos</a> ($DATE) </a></center></h1></head>";
-echo '<body>';
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $date_dirs = array_filter(glob($photo_dir."/$DATE/*"), 'is_dir');
 arsort($date_dirs);
+?>
+
+
+<html>
+<title>$CAMERA Photos ($DATE)</title>
+<head><h1><center><a href='./index.php'><?php echo $CAMERA ?>Photos</a> <?php echo "($DATE)"?> </a></center></h1>
+    <style>
+        div.gallery {
+            margin: 5px;
+            border: 1px solid #ccc;
+            float: left;
+            width: 180px;
+        }
+
+        div.gallery:hover {
+            border: 1px solid #777;
+        }
+
+        div.gallery img {
+            width: 100%;
+            height: auto;
+        }
+
+        div.desc {
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<?php
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
+
     $p_images = getPersonImages($v);
     $o_images = getOtherImages($v);
-    if(count($p_images)!=0){
-        echo "<h2>$hour&emsp;<A href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour&tag=person'>Person images(".count($p_images).")</A>&emsp;<A href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour&tag=other'> Other Images (".count($o_images).")</A></h2>";
-    }
-    else{
-        echo "<h2><A href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour&tag=all'>$hour</A> (".count($o_images)." Images with no persons)</h2>";
-    }
+    $all_images = array_merge($p_images,$o_images);
+
+    $p_count = count($p_images);
+    $t_count = count($all_images);
+
+    echo "<div class='gallery''>\n";
+    echo "<a target='_blank' href='img_5terre.jpg'> <img src='img_5terre.jpg' alt='Cinque Terre' width='600' height='400'> </a>\n";
+    echo "<div class='desc'>$hour ( $p_count / $t_count ) </div>\n";
+    echo '</div>\n';
 }
-echo '</body>';
-echo '</html>';
 ?>
+
+</body>
+</html>
