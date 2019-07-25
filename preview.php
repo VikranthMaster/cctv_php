@@ -91,8 +91,8 @@ if($int_hour!="23"){
 echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR&tag=$TAG'>$other_cam</a></div></h2>\n";
 
 echo "<button class='tablink' onclick=\"openPage('Persons', this, 'green')\" id='defaultOpen'>Persons</button>\n";
-echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other</button>";
-echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All</button>";
+echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other</button>\n";
+echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All</button>\n";
 
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $photo_dir .= "/$DATE/$HOUR";
@@ -101,7 +101,7 @@ $o_images = getPersonImages($photo_dir);
 $all_images = array_merge($p_images,$o_images);
 sort($all_images);
 
-echo "<div id='Persons' class='tabcontent'>";
+echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($p_images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
@@ -118,7 +118,7 @@ echo '</div>';
 echo '</div>';
 
 
-echo "<div id='Other' class='tabcontent'>";
+echo "<div id='Other' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($o_images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
@@ -135,7 +135,7 @@ echo '</div>';
 echo '</div>';
 
 
-echo "<div id='All' class='tabcontent'>";
+echo "<div id='All' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($all_images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
