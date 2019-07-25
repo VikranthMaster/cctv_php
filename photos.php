@@ -42,6 +42,7 @@ arsort($date_dirs);
 <body>
 
 <?php
+$other_cam = $CAMERA=="Gate"? "Stairs" : "Gate";
 $today = strtotime($DATE);
 $yday = date('Y-m-d', strtotime('-1 day', $today ));
 $tmrw = date('Y-m-d', strtotime('1 day', $today));
@@ -52,7 +53,7 @@ if(file_exists("$photo_dir/$yday")){
 if(file_exists("$photo_dir/$tmrw")) {
     echo "<div style='float: right'><a href='./photos.php?camera=$CAMERA&date=$tmrw'> Next</a> ($tmrw)</div>\n";
 }
-echo "<div style='margin: auto; width: 250px;'>&emsp;&emsp;</div></h2>\n";
+echo "<div style='margin: auto; width: 250px;'><a href='./photos.php?camera=$other_cam&date=$DATE'>$other_cam</a></div></h2>\n";
 
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
