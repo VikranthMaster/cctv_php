@@ -42,6 +42,18 @@ arsort($date_dirs);
 <body>
 
 <?php
+$today = strtotime($DATE);
+$yday = date('Y-m-d', strtotime('-1 day', $today ));
+$tmrw = date('Y-m-d', strtotime('1 day', $today));
+
+if(file_exists($photo_dir/$yday)){
+    echo "<div style='float: left'><a href='./photos.php?camera=$CAMERA&date=$yday'> Previous</a> (21 hour)</div>\n";
+}
+if(file_exists($photo_dir/$tmrw)) {
+    echo "<div style='float: right'><a href='./photos.php?camera=$CAMERA&date=$tmrw'> Next</a> (23 hour)</div>\n";
+}
+echo "<div style='margin: auto; width: 250px;'>&emsp;&emsp;</div></h2>\n";
+
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
 
