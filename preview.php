@@ -4,7 +4,6 @@ require_once('authorize.php');
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
 $HOUR = $_GET["hour"];
-$TAG= $_GET["tag"];
 ?>
 
 
@@ -13,7 +12,7 @@ $TAG= $_GET["tag"];
 <head>
     <meta charset="UTF-8">
     <title> <?php echo "$CAMERA Photos ($DATE) ($HOUR) (All)" ?> </title>
-    <?php echo "<h1><center><a href='../../../'>$CAMERA Photos</a>&nbsp<a href='./photos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR) (All)</a></center></h1>" ?>
+    <?php echo "<h1><center><a href='../../../'>$CAMERA Photos</a>&nbsp<a href='./photos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR)</a></center></h1>" ?>
 
     <!-- Core CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
@@ -83,16 +82,12 @@ $prev_hour = sprintf("%'.02d",$int_hour-1);
 $next_hour = sprintf("%'.02d",$int_hour+1);
 echo "<h2><h2>";
 if($int_hour!="00"){
-    echo "<div style='float: left'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$prev_hour"."hour&tag=$TAG'> Previous</a> ($prev_hour hour)</div>\n";
+    echo "<div style='float: left'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$prev_hour"."hour'> Previous</a> ($prev_hour hour)</div>\n";
 }
 if($int_hour!="23"){
-    echo "<div style='float: right'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour&tag=$TAG'> Next</a> ($next_hour hour)</div>\n";
+    echo "<div style='float: right'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour'> Next</a> ($next_hour hour)</div>\n";
 }
-echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR&tag=$TAG'>$other_cam</a></div></h2>\n";
-
-echo "<button class='tablink' onclick=\"openPage('Persons', this, 'green')\" id='defaultOpen'>Persons</button>\n";
-echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other</button>\n";
-echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All</button>\n";
+echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR'>$other_cam</a></div></h2>\n";
 
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
 $photo_dir .= "/$DATE/$HOUR";
@@ -100,6 +95,11 @@ $p_images = getPersonImages($photo_dir);
 $o_images = getOtherImages($photo_dir);
 $all_images = array_merge($p_images,$o_images);
 sort($all_images);
+
+
+echo "<button class='tablink' onclick=\"openPage('Persons', this, 'green')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
+echo "<button class='tablink' onclick=\"openPage('Other', this, 'green')\">Other (".count($p_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('All', this, 'green')\">All (".count($all_images).") </button>\n";
 
 echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
