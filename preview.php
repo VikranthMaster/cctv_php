@@ -75,7 +75,7 @@ if($TAG=="person"){
     $images = getOtherImages($photo_dir);
 }
 
-echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>";
+echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 
 foreach($images as $index => $img){
     $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
@@ -84,12 +84,9 @@ foreach($images as $index => $img){
     if(!file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$img")){
         $thumb_link = $img_link;
     }
-    echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>";
-    echo "<a href='$img_link' itemprop='contentUrl' data-size='1920x1080'>";
-    echo "<img src='$thumb_link' itemprop='thumbnail' alt='Image description'/>";
-    echo '</a>';
-    echo "<figcaption itemprop='caption description'>$DATE $img</figcaption>";
-    echo '</figure>';
+    echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";
+    echo "<a href='$img_link' itemprop='contentUrl' data-size='1920x1080'> <img src='$thumb_link' itemprop='thumbnail' alt='Image description'/></a>\n";
+    echo "<figcaption itemprop='caption description'>$DATE $img</figcaption></figure>\n";
 }
 echo '</div>';
 ?>
