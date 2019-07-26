@@ -50,7 +50,6 @@ def move_images(source_dir, target_dir, date, camera):
             dest_path = os.path.join(target_dir, date, hr, file_name)
             try:
                 ffmpeg.input(img).output(dest_path).run()
-                os.remove(dest_path)
                 updated_dirs.add(target_dir+":"+date+":"+hr)
             except Exception as ex:
                 log_message("Error moving file:"+img)
@@ -58,7 +57,8 @@ def move_images(source_dir, target_dir, date, camera):
                 continue
 
             try:
-                ffmpeg.input(dest_path).filter('scale',400,-1).output(os.path.join(thumbnail_dir,file_name)).run()
+                ffmpeg.input(img).filter('scale',400,-1).output(os.path.join(thumbnail_dir,file_name)).run()
+                os.remove(dest_path)
             except Exception as ex:
                 log_message("Error saving thumbnail image for:"+img)
                 log_message(str(ex))
