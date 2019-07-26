@@ -76,18 +76,15 @@ def save_space_image(date_dir):
     for hour_dir in get_sub_dirs(date_dir):
         all_images = get_files(os.path.join(date_dir, hour_dir), "jpg")
         non_person_imgs = all_images
-        person_dir = os.path.join(date_dir,hour_dir,"persons")
-        if os.path.exists(person_dir):
-            person_imgs = get_files(person_dir,"jpg")
-            non_person_imgs = [x for x in all_images if x not in person_imgs]
-
+        person_imgs = getPersonImages(os.path.join(date_dir,hour_dir))
+        non_person_imgs = [x for x in all_images if x not in person_imgs]
         replace_with_low_res(os.path.join(date_dir,hour_dir),non_person_imgs)
 
 def save_space_video(date_dir):
     log_message("Running save_space_video on date:"+date_dir)
     for hour_dir in get_sub_dirs(date_dir):
-        person_dir = os.path.join(date_dir,hour_dir,"persons")
-        if not os.path.exists(person_dir):
+        person_imgs = os.path.join(date_dir,hour_dir)
+        if len(person_imgs)==0:
             gate_video = os.path.join(date_dir.replace("Photos","Videos"),hour_dir)
             if os.path.exists(gate_video):
                 shutil.rmtree(gate_video)
@@ -107,8 +104,7 @@ def check_person_exists_in_video(date_dir, hour, video):
     start_time = datetime.datetime.strptime(date + " " + temp[0], '%Y-%m-%d %H.%M.%S')
     end_time = datetime.datetime.strptime(date + " " + temp[1], '%Y-%m-%d %H.%M.%S')
 
-    person_dir = os.path.join(date_dir,hour,'persons')
-    imgs = get_files(person_dir,"jpg")
+    imgs = getPersonImages(os.path.join(date_dir,hour))
     imgs.sort()
     for i in range(len(imgs)):
         time = imgs[i].split('[M]')[0]
