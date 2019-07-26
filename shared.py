@@ -98,6 +98,12 @@ def save_video_space2(date_dir):
             if exists==False:
                 os.remove(os.path.join(date_dir,hr_dir,video))
 
+def encode_videos(date_dir):
+    log_message("Running encode_videos on date:"+date_dir)
+    for hr_dir in get_sub_dirs(date_dir):
+        for video in get_files(os.path.join(date_dir,hr_dir),"mp4"):
+            log_message("Encode video: "+video)
+
 def check_person_exists_in_video(date_dir, hour, video):
     date_dir = date_dir.replace("Videos","Photos")
     date = os.path.split(date_dir)[-1]
