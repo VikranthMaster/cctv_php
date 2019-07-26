@@ -103,6 +103,8 @@ def encode_videos(date_dir):
     for hr_dir in get_sub_dirs(date_dir):
         for video in get_files(os.path.join(date_dir,hr_dir),"mp4"):
             log_message("Encode video: "+video)
+            ffmpeg.input(os.path.join(date_dir,hr_dir,video)).output(os.path.join(date_dir,hr_dir,'out.mp4'),video_bitrate='256k').run()
+            break
 
 def check_person_exists_in_video(date_dir, hour, video):
     date_dir = date_dir.replace("Videos","Photos")
