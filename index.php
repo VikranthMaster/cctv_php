@@ -32,42 +32,48 @@ $per_full = sprintf('%1.2f' , $per_full)
     <tr>
         <th><h2>Gate Photos</h2></th>
         <th><h2>Stairs Photos</h2></th>
-        <th><h2>Gate Videos</h2></th>
-        <th><h2>Stairs Videos</h2></th>
-    </tr>
-    <?php
-    $dirs = array_filter(glob($GATE_PHOTO_DIR."/*"), 'is_dir');
-    arsort($dirs);
-    foreach($dirs as $k => $v){
-        $v = basename($v);
-        echo '<tr>';
-        echo "<td><h2><a href='./photos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-        if(file_exists("$STAIRS_PHOTO_DIR/$v")){
-            echo "<td><h2><a href='./photos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
-        }else{
-            echo "<td><h2>Not Available</h2></td>";
-        }
-        if(file_exists("$GATE_VIDEO_DIR/$v")){
-            echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-        }else{
-            echo "<td><h2>Not Available</h2></td>";
-        }
-        if(file_exists("$STAIRS_VIDEO_DIR/$v")){
-            echo "<td><h2><a href='./videos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
-        }else{
-            echo "<td><h2>Not Available</h2></td>";
+        <?php
+        if(videosExists()){
+            echo "<th><h2>Gate Videos</h2></th>";
+            echo "<th><h2>Stairs Videos</h2></th>";
         }
         echo '</tr>';
-    }
-    echo '</table>';
-    if(file_exists("$HDD_ROOT/logs/internt_autologin")){
-        echo "<h2><a href='./logs/internet_autologin/log.txt'> Internet Autologin</a></h2>";
-    }
-    if(file_exists("$HDD_ROOT/logs/nightly")){
-        echo "<h2><a href='./logs/nightly/log.txt'> Nightly Log </a></h2>";
-    }
-    ?>
-    <h2><a href='./logs.php'> Logs </a></h2>
+        $dirs = array_filter(glob($GATE_PHOTO_DIR."/*"), 'is_dir');
+        arsort($dirs);
+        foreach($dirs as $k => $v){
+            $v = basename($v);
+            echo '<tr>';
+            echo "<td><h2><a href='./photos.php?camera=Gate&date=$v'> $v </a></h2></td>";
+            if(file_exists("$STAIRS_PHOTO_DIR/$v")){
+                echo "<td><h2><a href='./photos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
+            }else{
+                echo "<td><h2>Not Available</h2></td>";
+            }
+            if(file_exists("$GATE_VIDEO_DIR/$v")){
+                echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
+            }else{
+                if(videosExists()) {
+                    echo "<td><h2>Not Available</h2></td>";
+                }
+            }
+            if(file_exists("$STAIRS_VIDEO_DIR/$v")){
+                echo "<td><h2><a href='./videos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
+            }else{
+                if(videosExists()) {
+                    echo "<td><h2>Not Available</h2></td>";
+                }
+            }
+            echo '</tr>';
+        }
+        echo '</table>';
+        if(file_exists("$HDD_ROOT/logs/internt_autologin")){
+            echo "<h2><a href='./logs/internet_autologin/log.txt'> Internet Autologin</a></h2>";
+        }
+        if(file_exists("$HDD_ROOT/logs/nightly")){
+            echo "<h2><a href='./logs/nightly/log.txt'> Nightly Log </a></h2>";
+        }
+        ?>
+        <h2><a href='./logs.php'> Logs </a></h2>
 
 </body>
 </html>

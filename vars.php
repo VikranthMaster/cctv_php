@@ -59,4 +59,8 @@ function getOtherImages($root_dir){
     return $o_images;
 }
 
+function videosExists(){
+    return file_exists("/mnt/hdd/GateVideos");
+}
+
 ?>
