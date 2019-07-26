@@ -58,7 +58,7 @@ def move_images(source_dir, target_dir, date, camera):
 
             try:
                 ffmpeg.input(img).filter('scale',400,-1).output(os.path.join(thumbnail_dir,file_name)).run()
-                os.remove(dest_path)
+                os.remove(img)
             except Exception as ex:
                 log_message("Error saving thumbnail image for:"+img)
                 log_message(str(ex))
