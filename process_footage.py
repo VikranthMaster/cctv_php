@@ -49,7 +49,8 @@ def move_images(source_dir, target_dir, date, camera):
             file_name = get_target_file_name(img, camera)
             dest_path = os.path.join(target_dir, date, hr, file_name)
             try:
-                shutil.move(img,dest_path)
+                ffmpeg.input(img).output(dest_path).run()
+                os.remove(dest_path)
                 updated_dirs.add(target_dir+":"+date+":"+hr)
             except Exception as ex:
                 log_message("Error moving file:"+img)
@@ -57,9 +58,7 @@ def move_images(source_dir, target_dir, date, camera):
                 continue
 
             try:
-                cv2_img = cv2.imread(dest_path)
-                cv2_img = cv2.resize(cv2_img, (400, 225))
-                cv2.imwrite(os.path.join(thumbnail_dir,file_name), cv2_img)
+                ffmpeg.input(dest_path).filter('scale',400,-1).output(os.path.join(thumbnail_dir,file_name)).run()
             except Exception as ex:
                 log_message("Error saving thumbnail image for:"+img)
                 log_message(str(ex))
