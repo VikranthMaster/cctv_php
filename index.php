@@ -66,7 +66,7 @@ $per_full = sprintf('%1.2f' , $per_full)
             echo '</tr>';
         }
         echo '</table>';
-        if(file_exists("$HDD_ROOT/logs/internt_autologin")){
+        if(file_exists("$HDD_ROOT/logs/internet_autologin")){
             echo "<h2><a href='./logs/internet_autologin/log.txt'> Internet Autologin</a></h2>";
         }
         if(file_exists("$HDD_ROOT/logs/nightly")){
