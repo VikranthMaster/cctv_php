@@ -45,16 +45,13 @@ def log_message(message):
 def getPersonImages(root_dir):
     persons = []
     p_file = open(os.path.join(root_dir,"person.txt"),"r")
-    cnt = 1
     while True:
-        line = p_file.readline()
-        if line == None:
+        line = p_file.readline().strip()
+        if line == '':
             break;
-        print("Line {}: {}".format(cnt, line.strip()))
-        cnt+=1
         persons.append(line)
 
-    print(persons)
+    return persons
 
 def addMarkerLine():
     log_message("*"*180)
