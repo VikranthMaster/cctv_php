@@ -65,6 +65,8 @@ foreach($date_dirs as $k => $v){
     $p_count = count($p_images);
     $video_count = count($all_videos);
 
+    if($video_count==0) continue;
+
     reset($p_images);
     $img = current($p_images);
     if($p_count==0){
