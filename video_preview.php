@@ -63,7 +63,7 @@ foreach($all_videos as $index => $vid){
     $vid_name = basename($vid);
 
     echo "<div class='vgallery'>";
-    echo "<video width='400' controls>";
+    echo "<video width='400' controls preload='none'>";
     echo "<source src='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name' type='video/mp4'>";
     echo '</video>';
     echo "<div class='desc'>$vid_name</div>";
