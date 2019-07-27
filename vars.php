@@ -60,7 +60,32 @@ function getOtherImages($root_dir){
 }
 
 function videosExists(){
-    return file_exists("/mnt/hdd/GateVideos");
+    global $GATE_VIDEO_DIR;
+    return file_exists($GATE_VIDEO_DIR);
+}
+
+function getThumbImage($CAMERA, $DATE, $HOUR){
+    global $GATE_PHOTO_DIR;
+    global $STAIRS_PHOTO_DIR;
+    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
+    $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
+
+    $p_images = getPersonImages("$cam_dir/$DATE/$HOUR");
+    reset($p_images);
+    $img = current($p_images);
+
+    $p_count = count($p_images);
+    if($p_count==0){
+        $o_images = getOtherImages("$cam_dir/$DATE/$HOUR");
+        reset($o_images);
+        $img = current($o_images);
+    }
+
+    $thumb_img = "./$cam/$DATE/$HOUR/$img";
+    if(file_exists("$cam_dir/$DATE/$HOUR/thumbnails/$img")){
+        $thumb_img = "./$cam/$DATE/$HOUR/thumbnails/$img";
+    }
+    return $thumb_img;
 }
 
 ?>
