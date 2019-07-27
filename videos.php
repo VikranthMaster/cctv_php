@@ -58,14 +58,15 @@ $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
     $all_videos = glob("$v/*.mp4");
+    $video_count = count($all_videos);
+
+    if($video_count==0) continue;
+
 
     $p_images = getPersonImages("$HDD_ROOT/$cam/$DATE/$hour");
     $o_images = getOtherImages("$HDD_ROOT/$cam/$DATE/$hour");
 
     $p_count = count($p_images);
-    $video_count = count($all_videos);
-
-    if($video_count==0) continue;
 
     reset($p_images);
     $img = current($p_images);
