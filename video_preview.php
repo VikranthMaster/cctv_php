@@ -66,7 +66,7 @@ foreach($all_videos as $index => $vid){
     echo "<video width='400' controls>";
     echo "<source src='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name' type='video/mp4'>";
     echo '</video>';
-    echo "<div class='desc'>$vid_name(".HumanSize(filesize($vid)).") </div>";
+    echo "<div class='desc'>$vid_name</div>";
     echo '</div>';
 }
 
