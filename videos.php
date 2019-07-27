@@ -10,8 +10,8 @@ arsort($date_dirs);
 ?>
 
 <html>
-<title><?php echo "$CAMERA Photos ($DATE)"?></title>
-<head><h1><center><a href='./index.php'><?php echo $CAMERA ?>Photos</a> <?php echo "($DATE)"?> </a></center></h1>
+<title><?php echo "$CAMERA Videos ($DATE)"?></title>
+<head><h1><center><a href='./index.php'><?php echo $CAMERA ?>Videos</a> <?php echo "($DATE)"?> </a></center></h1>
     <style>
         div.gallery {
             margin: 5px;
