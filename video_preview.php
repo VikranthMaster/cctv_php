@@ -10,10 +10,39 @@ $int_hour = substr($HOUR,0,2);
 $prev_hour = sprintf("%'.02d",$int_hour-1);
 $next_hour = sprintf("%'.02d",$int_hour+1);
 $other_cam = $CAMERA=="Gate"? "Stairs" : "Gate";
+?>
+    <html>
+    <title><?php echo "$CAMERA Videos ($DATE) ($HOUR)"?></title>
+    <head>
+        <style>
+            div.vgallery {
+                margin: 5px;
+                border: 2px solid #ccc;
+                float: left;
+                width: 400px;
+            }
 
-echo '<html>';
-echo "<title>$CAMERA Videos ($DATE) ($HOUR)</title>";
-echo "<head><h1><center><a href='../../../'>$CAMERA Videos</a>&nbsp<a href='./videos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR) </a></center></h1></head>";
+            div.vgallery:hover {
+                border: 2px solid #777;
+            }
+
+            div.vgallery img {
+                width: 100%;
+                height: auto;
+            }
+
+            div.desc {
+                font-size: larger;
+                font-weight: bolder;
+                padding: 10px;
+                text-align: center;
+                background-color: #5DADE2;
+            }
+        </style>
+
+<?php
+echo "<h1><center><a href='./index.php'>$CAMERA Videos</a>&nbsp<a href='./videos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR) </a></center></h1>";
+echo "</head>";
 echo '<body>';
 echo '<h2><h2>';
 
@@ -32,7 +61,13 @@ $video_dir .= "/$DATE/$HOUR";
 $all_videos = glob("$video_dir/*.mp4");
 foreach($all_videos as $index => $vid){
     $vid_name = basename($vid);
-    echo "<h2><a href='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name</a> (".HumanSize(filesize($vid)).")</h2>";
+
+    echo "<div class='vgallery'>";
+    echo "<video width='400' controls>";
+    echo "<source src='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name' type='video/mp4'>";
+    echo '</video>';
+    echo "<div class='desc'>$vid_name(".HumanSize(filesize($vid)).") </div>";
+    echo '</div>';
 }
 
 echo '</body></html>';
