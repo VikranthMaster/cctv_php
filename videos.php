@@ -58,7 +58,8 @@ $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
     $all_videos = glob("$v/*.mp4");
-    if(count($all_videos)==0) continue;
+    $video_count = count($all_videos);
+    if($video_count==0) continue;
 
     $thumb_link = getThumbImage($CAMERA,$DATE,$hour);
 

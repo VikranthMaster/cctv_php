@@ -63,7 +63,7 @@ foreach($date_dirs as $k => $v){
 
     $p_count = count($p_images);
     $o_count = count($o_images);
-    $t_count = $p_count = $o_count;
+    $t_count = $p_count + $o_count;
 
     $thumb_link = getThumbImage($CAMERA,$DATE,$hour);
 
