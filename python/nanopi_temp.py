@@ -1,5 +1,3 @@
-import os
-import time
 import datetime
 
 def measure_temp():

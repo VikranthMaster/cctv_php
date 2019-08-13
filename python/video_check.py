@@ -1,7 +1,5 @@
 # Importing all necessary libraries
-import cv2
-import os
-from shared import *
+from python.shared import *
 
 # Read the video from specified path
 cam = cv2.VideoCapture("vid/test.mp4")

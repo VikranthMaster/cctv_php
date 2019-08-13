@@ -1,4 +1,4 @@
-from shared import *
+from python.shared import *
 import urllib.request
 import time
 from pytz import timezone
