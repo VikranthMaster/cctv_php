@@ -6,7 +6,6 @@ import time
 import os.path
 from shared import *
 from detector import DetectorAPI
-
 def remove_duplicates(cur_dir):
     imgs = get_files(cur_dir,"jpg")
     imgs.sort()
@@ -86,7 +85,7 @@ now = datetime.datetime.now()
 lasthour = now-datetime.timedelta(hours=1)
 date = lasthour.strftime("%Y-%m-%d")
     
-model_path = '/home/pi/tensorflow1/models/research/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09/frozen_inference_graph.pb'
+model_path = '/home/pi/Downloads/trained_weights/frozen_inference_graph.pb'
 odapi = DetectorAPI(path_to_ckpt=model_path)
 threshold = 0.5
     
