@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os.path
-from python.shared import *
+from shared import *
 
 gate_root_dir = "/mnt/hdd/tmp/GateCamera/"
 gate_target_imgs_dir = photo_root_dirs[0]

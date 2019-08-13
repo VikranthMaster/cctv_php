@@ -4,8 +4,8 @@
 
 import time
 import os.path
-from python.shared import *
-from python.detector import DetectorAPI
+from shared import *
+from detector import DetectorAPI
 def remove_duplicates(cur_dir):
     imgs = get_files(cur_dir,"jpg")
     imgs.sort()

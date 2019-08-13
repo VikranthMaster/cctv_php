@@ -1,6 +1,4 @@
 #!/usr/bin/python
-import os.path
-import glob
 from shared import *
 
 root_dir = "/mnt/hdd/StairsPhotos"

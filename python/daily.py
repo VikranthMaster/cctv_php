@@ -1,4 +1,4 @@
-from python.shared import *
+from shared import *
 
 save_space_main()
 delete_old_footage()
