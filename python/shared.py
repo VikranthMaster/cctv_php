@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import tarfile
 import glob
+import ffmpeg
 
 photo_root_dirs = ["/mnt/hdd/GatePhotos", "/mnt/hdd/StairsPhotos"]
 video_root_dirs = ["/mnt/hdd/GateVideos", "/mnt/hdd/StairsVideos"]
