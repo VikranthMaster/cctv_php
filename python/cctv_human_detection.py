@@ -87,7 +87,7 @@ date = lasthour.strftime("%Y-%m-%d")
     
 model_path = '/home/pi/Downloads/trained_weights/frozen_inference_graph.pb'
 odapi = DetectorAPI(path_to_ckpt=model_path)
-threshold = 0.5
+threshold = 0.6
     
 hour = '%02dhour'%(lasthour.hour)
 

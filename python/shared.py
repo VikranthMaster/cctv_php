@@ -8,6 +8,7 @@ import numpy as np
 import tarfile
 import glob
 import ffmpeg
+import argparse
 
 photo_root_dirs = ["/mnt/hdd/GatePhotos", "/mnt/hdd/StairsPhotos"]
 video_root_dirs = ["/mnt/hdd/GateVideos", "/mnt/hdd/StairsVideos"]
@@ -253,3 +254,9 @@ def save_space_main():
         date_dir = os.path.join(video_root,past_date)
         if os.path.exists(date_dir):
             save_video_space2(date_dir)
+
+def dir_path(path):
+    if os.path.isdir(path):
+        return path
+    else:
+        raise argparse.ArgumentTypeError("'%s' is not a valid path"%(path))
