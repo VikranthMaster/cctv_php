@@ -53,7 +53,7 @@ def runOnDirectory(root_dir,date,hour):
     for x in images:
         try:
             img = cv2.imread(cur_dir+"/"+x)
-            img = cv2.resize(img, (1280, 720))
+            img = cv2.resize(img, (640, 360))
         except Exception as e:
             print("Error reading file:"+x)
             continue
