@@ -17,6 +17,7 @@ img_path = args.input_file.name
 odapi = DetectorAPI(path_to_ckpt=model_path)
 threshold = 0.5
 img = cv2.imread(img_path)
+img = cv2.resize(img, (640,360))
 
 start_time = time.time()
 
