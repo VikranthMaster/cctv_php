@@ -20,6 +20,9 @@ from PIL import Image
 from object_detection.utils import dataset_util
 from collections import namedtuple, OrderedDict
 
+import contextlib2
+from object_detection.dataset_tools import tf_record_creation_util
+
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
@@ -86,14 +89,26 @@ def main(_):
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
     path = os.path.join(FLAGS.image_dir)
     examples = pd.read_csv(FLAGS.csv_input)
-    grouped = split(examples, 'filename')
-    for group in grouped:
-        tf_example = create_tf_example(group, path)
-        writer.write(tf_example.SerializeToString())
-
-    writer.close()
-    output_path = os.path.join(os.getcwd(), FLAGS.output_path)
-    print('Successfully created the TFRecords: {}'.format(output_path))
+    # grouped = split(examples, 'filename')
+#     for group in grouped:
+#         tf_example = create_tf_example(group, path)
+#         writer.write(tf_example.SerializeToString())
+# 
+#     writer.close()
+#     output_path = os.path.join(os.getcwd(), FLAGS.output_path)
+#     print('Successfully created the TFRecords: {}'.format(output_path))
+    
+    num_shards=100
+	
+	with contextlib2.ExitStack() as tf_record_close_stack:
+  		output_tfrecords = tf_record_creation_util.open_sharded_output_tfrecords(tf_record_close_stack, path, num_shards)
+		for index, example in examples:
+    		tf_example = create_tf_example(example)
+    		output_shard_index = index % num_shards
+    		output_tfrecords[output_shard_index].write(tf_example.SerializeToString())
+    
+    
+    
 
 if __name__ == '__main__':
     tf.app.run()
