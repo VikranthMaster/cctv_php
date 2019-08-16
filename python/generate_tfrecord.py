@@ -101,7 +101,7 @@ def main(_):
     num_shards=100
 	
     with contextlib2.ExitStack() as tf_record_close_stack:
-  	    output_tfrecords = tf_record_creation_util.open_sharded_output_tfrecords(tf_record_close_stack, path, num_shards)
+  	    output_tfrecords = tf_record_creation_util.open_sharded_output_tfrecords(tf_record_close_stack, FLAGS.output_path, num_shards)
   	    index = 0
   	    for example in grouped:
   	        tf_example = create_tf_example(example, path)
