@@ -104,7 +104,7 @@ def main(_):
   	    output_tfrecords = tf_record_creation_util.open_sharded_output_tfrecords(tf_record_close_stack, path, num_shards)
   	    index = 0
   	    for example in grouped:
-  	        tf_example = create_tf_example(example)
+  	        tf_example = create_tf_example(example, path)
   	        output_shard_index = index % num_shards
   	        output_tfrecords[output_shard_index].write(tf_example.SerializeToString())
   	        index = index + 1
