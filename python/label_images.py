@@ -100,7 +100,3 @@ total = runOnDirectory(directory_path)
 total_time = time.time() - start_time
 str = ("Person detect ran at %d images and took %d minutes and %d seconds\n")%(total,total_time/60, total_time%60)
 log_message(str)
-
-split_labels(os.path.join(directory_path,"labels.csv"))
-
-
