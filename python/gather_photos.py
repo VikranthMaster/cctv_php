@@ -13,7 +13,14 @@ print("Gathering photos from "+ input_dir)
 for img in  glob.iglob(input_dir + '/**/*.jpg', recursive=True):
     size = os.path.getsize(img)
     if size<100000:
+        os.remove(img)
         continue
-    dest_file = os.path.relpath(img,"/mnt/hdd").replace('/','_')
-    ffmpeg.input(img).filter('scale',640,-1).output(os.path.join(output_dir,dest_file)).run()
+    dest_file = os.path.relpath(img,"/Volumes/MAC_DRIVE/CCTV").replace('/','_')
+    if os.path.exists(os.path.join(output_dir,dest_file)):
+        print("File already exists:"+img)
+        continue
+    try:
+        ffmpeg.input(img).filter('scale',640,-1).output(os.path.join(output_dir,dest_file)).run()
+    except:
+        print("Error saving: "+img)
 
