@@ -85,7 +85,7 @@ now = datetime.datetime.now()
 lasthour = now-datetime.timedelta(hours=1)
 date = lasthour.strftime("%Y-%m-%d")
     
-model_path = '/home/pi/Downloads/trained_weights/frozen_inference_graph.pb'
+model_path = '/home/pi/person_detect_models/latest/frozen_inference_graph.pb'
 odapi = DetectorAPI(path_to_ckpt=model_path)
 threshold = 0.6
     
