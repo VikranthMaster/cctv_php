@@ -110,9 +110,4 @@ total = runOnDirectory(directory_path)
 
 total_time = time.time() - start_time
 str = ("Person detect ran at %d images and took %d minutes and %d seconds\n")%(total,total_time/60, total_time%60)
-<<<<<<< HEAD
 log_message(str)
-
-=======
-log_message(str)
->>>>>>> f150279449910b32a378fbcbfa5db33f952fdcb7
