@@ -6,29 +6,58 @@ import time
 import os.path
 from shared import *
 from detector import DetectorAPI
-import numpy as np
-import pandas as pd
-np.random.seed(1)
+
+def setup_target_dir(root_dir,threshold):
+    tar_dir = os.path.join(root_dir,"persons_"+threshold)
+    ensure_dir_exists(tar_dir)
+    lbl_csv = open(os.path.join(root_dir,"lbl_csv_"+threshold+".csv"),"w")
+    lbl_csv.write("filename,width,height,class,xmin,ymin,xmax,ymax\n")
+    return (tar_dir,lbl_csv)
+
+def copyToDir(tar_dir, label_csv, img, x, box, score):
+    cv2.rectangle(img,(box[1],box[0]),(box[3],box[2]),(255,0,0),2)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(img, score, (box[3],box[2]),font, 0.8, (255, 0, 0), 2, cv2.LINE_AA)
+    cv2.imwrite(os.path.join(tar_dir,x), img)
+    label = "%d %d %d %d %s\n"%(box[1],box[0],box[3],box[2],score)
+    print("Person found: "+ label)
+    label_csv.write(x+",640,360,person,%d,%d,%d,%d\n"%(box[1],box[0],box[3],box[2]))
+
 
 def runOnDirectory(root_dir):
     cur_dir = os.path.join(root_dir)
-    tar_dir = os.path.join(root_dir,"persons")
+    
     noperson_dir = os.path.join(root_dir,"noperson")
-    label_csv = open(os.path.join(root_dir,"labels.csv"),"w")
-    label_csv.write("filename,width,height,class,xmin,ymin,xmax,ymax\n")
-
-    ensure_dir_exists(tar_dir)
     ensure_dir_exists(noperson_dir)
 
+    (tar_dir_98, lbl_csv_98) = setup_target_dir(root_dir, '98')
+    (tar_dir_90, lbl_csv_90) = setup_target_dir(root_dir, '90')
+    (tar_dir_75, lbl_csv_75) = setup_target_dir(root_dir, '75')
+    (tar_dir_60, lbl_csv_60) = setup_target_dir(root_dir, '60')
+        
+    
     log_message("Running on.. "+cur_dir)
     images = get_files(cur_dir, "jpg")
     count = 0
     for x in images:
         print("Image number: %d"%(count))
+        
         count = count+1
-        if os.path.exists(os.path.join(tar_dir,x)):
+        if os.path.exists(os.path.join(tar_dir_98,x)):
             print("Already processed")
             continue
+
+        if os.path.exists(os.path.join(tar_dir_90,x)):
+            print("Already processed")
+            continue
+            
+        if os.path.exists(os.path.join(tar_dir_75,x)):
+            print("Already processed")
+            continue
+            
+        if os.path.exists(os.path.join(tar_dir_60,x)):
+            print("Already processed")
+            continue                        
 
         try:
             img = cv2.imread(cur_dir+"/"+x)
@@ -40,47 +69,29 @@ def runOnDirectory(root_dir):
         boxes, scores, classes, num = odapi.processFrame(img)
 
         # Visualization of the results of a detection.
-
-        label = ""
+        noperson = True
         for i in range(len(boxes)):
             # Class 1 represents human
-            if classes[i] == 1 and scores[i] > threshold:
-                box = boxes[i]
-                cv2.rectangle(img,(box[1],box[0]),(box[3],box[2]),(255,0,0),2)
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(img, str(round(scores[i]*100, 2)), (box[3],box[2]),font, 0.8, (255, 0, 0), 2, cv2.LINE_AA)
-                cv2.imwrite(os.path.join(tar_dir,x), img)
-                label = label + "%d %d %d %d %s\n"%(box[1],box[0],box[3],box[2],str(round(scores[i]*100, 2)))
-                print("Person found: "+ label)
-                label_csv.write(x+",640,360,person,%d,%d,%d,%d\n"%(box[1],box[0],box[3],box[2]))
-        if label=="":
+            if classes[i] == 1 and scores[i] > 0.98:
+                copyToDir(tar_dir_98, lbl_csv_98, img, x, boxes[i], str(round(scores[i]*100, 2)))
+                noperson = False
+            elif classes[i] == 1 and scores[i] > 0.90:
+                copyToDir(tar_dir_90, lbl_csv_90, img, x, boxes[i], str(round(scores[i]*100, 2)))
+                noperson = False
+            elif classes[i] == 1 and scores[i] > 0.75:
+                copyToDir(tar_dir_75, lbl_csv_75, img, x, boxes[i], str(round(scores[i]*100, 2)))
+                noperson = False
+            elif classes[i] == 1 and scores[i] > 0.60:
+                copyToDir(tar_dir_60, lbl_csv_60, img, x, boxes[i], str(round(scores[i]*100, 2)))
+                noperson = False
+        if noperson==True:
             shutil.move(os.path.join(root_dir,x),noperson_dir)
 
-    label_csv.close()
+    lbl_csv_98.close()
+    lbl_csv_90.close()
+    lbl_csv_75.close()
+    lbl_csv_60.close()
     return len(images)
-
-def split_labels(label_file):
-    full_labels = pd.read_csv(label_file)
-    print(full_labels.head())
-    grouped = full_labels.groupby('filename')
-    print(grouped.apply(lambda x: len(x)).value_counts())
-
-    gb = full_labels.groupby('filename')
-    grouped_list = [gb.get_group(x) for x in gb.groups]
-    total = len(grouped_list)
-    print("Total records are: %d"%(total))
-    train_size = (int)(total*0.75)
-    print("Train records are: %d"%(train_size))
-    print("Test records are: %d"%(total-train_size))
-
-    train_index = np.random.choice(len(grouped_list), size=train_size, replace=False)
-    test_index = np.setdiff1d(list(range(train_size)), train_index)
-
-    train = pd.concat([grouped_list[i] for i in train_index])
-    test = pd.concat([grouped_list[i] for i in test_index])
-
-    train.to_csv(os.path.join(os.path.dirname(label_file),'train_labels.csv'), index=None)
-    test.to_csv(os.path.join(os.path.dirname(label_file),'test_labels.csv'), index=None)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('input_directory',type=dir_path,help="Directory to be processed")
@@ -100,7 +111,4 @@ total = runOnDirectory(directory_path)
 total_time = time.time() - start_time
 str = ("Person detect ran at %d images and took %d minutes and %d seconds\n")%(total,total_time/60, total_time%60)
 log_message(str)
-
-split_labels(os.path.join(directory_path,"labels.csv"))
-
 
