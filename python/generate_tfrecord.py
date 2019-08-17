@@ -98,7 +98,7 @@ def main(_):
 #     output_path = os.path.join(os.getcwd(), FLAGS.output_path)
 #     print('Successfully created the TFRecords: {}'.format(output_path))
     
-    num_shards=10
+    num_shards=100
 	
     with contextlib2.ExitStack() as tf_record_close_stack:
   	    output_tfrecords = tf_record_creation_util.open_sharded_output_tfrecords(tf_record_close_stack, FLAGS.output_path, num_shards)
