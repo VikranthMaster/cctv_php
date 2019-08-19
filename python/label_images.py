@@ -8,7 +8,9 @@ from shared import *
 from detector import DetectorAPI
 
 def setup_target_dir(root_dir,threshold):
-    tar_dir = os.path.join(root_dir,"persons_"+threshold)
+    root_person = os.path.join(root_dir,"persons")
+    ensure_dir_exists(root_person)
+    tar_dir = os.path.join(root_person,"persons_"+threshold)
     ensure_dir_exists(tar_dir)
     lbl_csv = open(os.path.join(root_dir,"lbl_csv_"+threshold+".csv"),"w")
     lbl_csv.write("filename,width,height,class,xmin,ymin,xmax,ymax\n")
