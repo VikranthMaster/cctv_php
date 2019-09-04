@@ -58,12 +58,14 @@ def runOnDirectory(root_dir,date,hour):
             print("Error reading file:"+x)
             continue
         boxes, scores, classes, num = odapi.processFrame(img)
-
+        label = ""
         for i in range(len(boxes)):
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
-                p_images.append(x)
-                break
+                label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
+
+        if label != "":
+            p_images.append(str(x)+" "+label) 
 
     person_txt = os.path.join(cur_dir,"person.txt")
     writeListToFile(p_images,person_txt)
