@@ -162,7 +162,9 @@ def backup_hour(hour_dir):
     # Add person images to list.
     f = open(person_list)
     while 1:
-        line = f.readline().split()[0].rstrip()
+        line = f.readline().rstrip()
+        if " " in line:
+            line = line.split()[0]
         if not line:
             break
         files_to_copy.append(os.path.join(hour_dir,line))
@@ -171,7 +173,7 @@ def backup_hour(hour_dir):
     # Add other images to list.
     f = open(other_list)
     while 1:
-        line = f.readline().split()[0].rstrip()
+        line = f.readline().rstrip()
         if not line:
             break
         files_to_copy.append(os.path.join(hour_dir,"thumbnails",line))
