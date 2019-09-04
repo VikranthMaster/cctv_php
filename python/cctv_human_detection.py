@@ -60,6 +60,7 @@ def runOnDirectory(root_dir,date,hour):
         boxes, scores, classes, num = odapi.processFrame(img)
         label = ""
         for i in range(len(boxes)):
+            box = boxes[i]
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
                 label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
