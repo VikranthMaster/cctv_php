@@ -51,11 +51,24 @@ def getPersonImages(root_dir):
         line = p_file.readline().strip()
         if line == '':
             break;
-        if ' ' in line:
-            line = line.strip()[0].rstrip()
+        if " " in line:
+            line = line.split()[0].rstrip()
         persons.append(line)
 
     return persons
+
+
+def getOtherImages(root_dir):
+    others = []
+    p_file = open(os.path.join(root_dir,"others.txt"),"r")
+    while True:
+        line = p_file.readline().strip()
+        if line == '':
+            break;
+
+        others.append(line)
+
+    return others
 
 def addMarkerLine():
     log_message("*"*180)
