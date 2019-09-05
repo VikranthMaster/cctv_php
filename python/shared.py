@@ -163,10 +163,10 @@ def backup_hour(hour_dir):
     f = open(person_list)
     while 1:
         line = f.readline().rstrip()
-        if " " in line:
-            line = line.split()[0]
         if not line:
             break
+        if " " in line:
+            line = line.split()[0]
         files_to_copy.append(os.path.join(hour_dir,line))
     f.close()
 
