@@ -42,7 +42,7 @@ if(file_exists("$photo_dir/person.txt")){
         if (strpos($line, " ") !== false) {
             $f_name = explode(" ", $line)[0];
             $boxes = rtrim(substr($line,strlen($f_name)+1));
-            echo "<canvas id='$photo_dir/$f_name' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
+            echo "<canvas id='./$cam/$DATE/$HOUR/$f_name' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
         }
     }
     fclose($person_file);
