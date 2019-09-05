@@ -277,3 +277,37 @@ def dir_path(path):
         return path
     else:
         raise argparse.ArgumentTypeError("'%s' is not a valid path"%(path))
+
+def remove_duplicates(cur_dir):
+    imgs = get_files(cur_dir,"jpg")
+    imgs.sort()
+    to_del = []
+    for index in range(0,len(imgs)-1):
+        one = cv2.imread(os.path.join(cur_dir,imgs[index]))
+        one = cv2.resize(one, (640, 360))
+        two = cv2.imread(os.path.join(cur_dir,imgs[index+1]))
+        two = cv2.resize(two, (640, 360))
+
+        # convert the images to grayscale
+        one = cv2.cvtColor(one, cv2.COLOR_BGR2GRAY)
+        two = cv2.cvtColor(two, cv2.COLOR_BGR2GRAY)
+
+        diff = mse(one,two)
+        if(diff<100):
+            to_del.append(imgs[index])
+
+    for img in to_del:
+        try:
+            os.remove(os.path.join(cur_dir,img))
+            os.remove(os.path.join(cur_dir,"thumbnails",img))
+        except Exception as error:
+            print("Error deleting duplicate image:"+img)
+    print("Total items to be deleted: %d out of %d" % (len(to_del),len(imgs)))
+
+def writeListToFile(list, file):
+    if os.path.exists(file):
+        os.remove(file)
+    f = open(file, "w")
+    for elem in list:
+        f.write(elem+"\n")
+    f.close()
