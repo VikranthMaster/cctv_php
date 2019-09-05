@@ -38,12 +38,12 @@ if(file_exists("$photo_dir/person.txt")){
     $person_file = fopen("$photo_dir/person.txt","r");
     while(!feof($person_file)){
         $line = rtrim(fgets($person_file));
-        echo $line;
-//        if (strpos($line, " ") !== false) {
-//            $f_name = explode(" ", $line)[0];
-//            $boxes = rtrim(substr($line,strlen($f_name)));
-//            echo "<canvas id='$f_name' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>";
-//        }
+//        echo $line;
+        if (strpos($line, " ") !== false) {
+            $f_name = explode(" ", $line)[0];
+            $boxes = rtrim(substr($line,strlen($f_name)));
+            echo "<canvas id='$f_name' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>";
+        }
     }
     fclose($person_file);
 }
