@@ -35,7 +35,7 @@ $photo_dir .= "/$DATE/$HOUR";
 $p_images = getPersonImages($photo_dir);
 
 if(file_exists("$photo_dir/person.txt")){
-    $person_file = fopen("$root_dir/person.txt","r");
+    $person_file = fopen("$photo_dir/person.txt","r");
     while(!feof($person_file)){
         $line = rtrim(fgets($person_file));
         echo $line;
