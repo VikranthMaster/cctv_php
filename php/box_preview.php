@@ -43,7 +43,13 @@ if(file_exists("$photo_dir/person.txt")){
         if (strpos($line, " ") !== false) {
             $f_name = explode(" ", $line)[0];
             $boxes = rtrim(substr($line,strlen($f_name)+1));
-            echo "<canvas id='./$cam/$DATE/$HOUR/$f_name' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
+
+            $img_link = "./$cam/$DATE/$HOUR/$f_name";
+            $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
+            if(file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$f_name")){
+                $img_link = $thumb_link;
+            }
+            echo "<canvas id='$img_link' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
         }
     }
     fclose($person_file);
