@@ -49,6 +49,7 @@ def runOnDirectory(root_dir,date,hour):
     remove_duplicates(cur_dir)
     images = get_files(cur_dir, "jpg")
     p_images = []
+    p_only_images = []
 
     for x in images:
         try:
@@ -66,7 +67,8 @@ def runOnDirectory(root_dir,date,hour):
                 label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
 
         if label != "":
-            p_images.append(str(x)+" "+label) 
+            p_images.append(str(x)+" "+label)
+            p_only_images.append(x)
 
     person_txt = os.path.join(cur_dir,"person.txt")
     writeListToFile(p_images,person_txt)
@@ -74,7 +76,7 @@ def runOnDirectory(root_dir,date,hour):
     others_txt = os.path.join(cur_dir,"others.txt")
     other_list = []
     for img in images:
-        if img not in p_images:
+        if img not in p_only_images:
             other_list.append(img)
     writeListToFile(other_list,others_txt)
     backup_hour(cur_dir)
