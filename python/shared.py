@@ -51,6 +51,8 @@ def getPersonImages(root_dir):
         line = p_file.readline().strip()
         if line == '':
             break;
+        if ' ' in line:
+            line = line.strip()[0].rstrip()
         persons.append(line)
 
     return persons
