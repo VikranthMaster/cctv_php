@@ -12,7 +12,7 @@ $HOUR = $_GET["hour"];
 <head>
     <meta charset="UTF-8">
     <title> <?php echo "$CAMERA Photos ($DATE) ($HOUR) (All)" ?> </title>
-    <?php echo "<h1><center><a href='../../../'>$CAMERA Photos</a>&nbsp<a href='./photos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR)</a></center></h1>" ?>
+    <?php echo "<h1><center><a href='../../../'>$CAMERA Photos</a>&nbsp<a href='./photos.php?camera=$CAMERA&date=$DATE'>($DATE)</a> ($HOUR)<a href='./box_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR>B</a></center></h1>" ?>
 
     <!-- Core CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
