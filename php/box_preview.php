@@ -36,6 +36,7 @@ $p_images = getPersonImages($photo_dir);
 
 if(file_exists("$photo_dir/person.txt")){
     $person_file = fopen("$photo_dir/person.txt","r");
+    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
     while(!feof($person_file)){
         $line = rtrim(fgets($person_file));
 //        echo $line;
