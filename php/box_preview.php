@@ -45,7 +45,7 @@ if(file_exists("$photo_dir/person.txt")){
             $boxes = rtrim(substr($line,strlen($f_name)+1));
 
             $img_link = "./$cam/$DATE/$HOUR/$f_name";
-            $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
+            $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$f_name";
             if(file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$f_name")){
                 $img_link = $thumb_link;
             }
