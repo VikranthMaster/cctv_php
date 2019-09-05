@@ -166,7 +166,7 @@ def backup_hour(hour_dir):
         if not line:
             break
         if " " in line:
-            line = line.split()[0]
+            line = line.split()[0].rstrip()
         files_to_copy.append(os.path.join(hour_dir,line))
     f.close()
 
