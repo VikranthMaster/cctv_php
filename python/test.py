@@ -8,7 +8,11 @@ def writeListToFile(list, file):
 
 def fix_dir(dir):
     print("Fixing directory: "+dir)
-    persons = getPersonImages(dir)
+    try:
+        persons = getPersonImages(dir)
+    except:
+        print("Exceptin in getPerson")
+        return
     others = getOtherImages(dir)
 
     print(len(persons))
