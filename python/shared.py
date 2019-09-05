@@ -311,3 +311,43 @@ def writeListToFile(list, file):
     for elem in list:
         f.write(elem+"\n")
     f.close()
+
+
+def runPersonDetect(root_dir,date,hour, odapi,threshold ):
+    cur_dir = os.path.join(root_dir,date,hour)
+
+    log_message("Running person detect on.. "+cur_dir)
+    images = get_files(cur_dir, "jpg")
+    p_images = []
+    p_only_images = []
+
+    for x in images:
+        try:
+            img = cv2.imread(cur_dir+"/"+x)
+            img = cv2.resize(img, (640, 360))
+        except Exception as e:
+            print("Error reading file:"+x)
+            continue
+        boxes, scores, classes, num = odapi.processFrame(img)
+        label = ""
+        for i in range(len(boxes)):
+            box = boxes[i]
+            # Class 1 represents human
+            if classes[i] == 1 and scores[i] > threshold:
+                label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
+
+        if label != "":
+            p_images.append(str(x)+" "+label)
+            p_only_images.append(x)
+
+    person_txt = os.path.join(cur_dir,"person.txt")
+    writeListToFile(p_images,person_txt)
+
+    others_txt = os.path.join(cur_dir,"others.txt")
+    other_list = []
+    for img in images:
+        if img not in p_only_images:
+            other_list.append(img)
+    writeListToFile(other_list,others_txt)
+
+    return len(images)

@@ -2,9 +2,21 @@ from shared import *
 import urllib.request
 import time
 from pytz import timezone
+from detector import DetectorAPI
+
 
 REMOTE_URL = "http://earwiggy-sealion-5900.dataplicity.io"
 LOCAL_PATH = "/mnt/hdd"
+
+def person_detect(camera,date,hour):
+    gate_model_path = 'C:\\Users\\sgudla\\Downloads\\models\\person_gate_model\\frozen_inference_graph.pb'
+    stairs_model_path = 'C:\\Users\\sgudla\\Downloads\\models\\person_stairs_model\\frozen_inference_graph.pb'
+    threshold = 0.9
+    if "GatePhotos":
+        odapi = DetectorAPI(path_to_ckpt=stairs_model_path)
+    else:
+        odapi = DetectorAPI(path_to_ckpt=gate_model_path)
+
 
 def getFootageHour(url,camera,date,hour):
     ensure_dir_exists(os.path.join(LOCAL_PATH,camera,date))
@@ -21,6 +33,7 @@ def getFootageHour(url,camera,date,hour):
         t.extractall(os.path.join(LOCAL_PATH,camera,date))
         t.close()
         os.remove(tar_local)
+        #person_detect(camera,date,hour)
     except Exception as e:
         print("Error getting tar file:"+tar)
         print(e)
