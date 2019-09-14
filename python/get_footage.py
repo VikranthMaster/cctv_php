@@ -69,6 +69,6 @@ for i in range(1,20):
     getFootageHour(REMOTE_URL,"StairsPhotos", date,hour)
 
 total_time = time.time() - start_time
-str = ("Get Footage took %d minutes and %d seconds\n")%(total_time/60, total_time%60)
+str = ("Get Footage at %s and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),total_time/60, total_time%60)
 print(str)
 addMarkerLine()

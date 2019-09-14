@@ -9,6 +9,7 @@ import tarfile
 import glob
 import ffmpeg
 import argparse
+import time
 
 photo_root_dirs = ["/mnt/hdd/GatePhotos", "/mnt/hdd/StairsPhotos"]
 video_root_dirs = ["/mnt/hdd/GateVideos", "/mnt/hdd/StairsVideos"]
@@ -315,7 +316,7 @@ def writeListToFile(list, file):
 
 def runPersonDetect(root_dir,date,hour, odapi,threshold ):
     cur_dir = os.path.join(root_dir,date,hour)
-
+    start_time = time.time()
     log_message("Running person detect on.. "+cur_dir)
     images = get_files(cur_dir, "jpg")
     p_images = []
@@ -349,5 +350,8 @@ def runPersonDetect(root_dir,date,hour, odapi,threshold ):
         if img not in p_only_images:
             other_list.append(img)
     writeListToFile(other_list,others_txt)
+    total_time = time.time() - start_time
+    st = ("Person detect ran at %s on %d images and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),len(images),total_time/60, total_time%60)
+    log_message(st)
 
     return len(images)
