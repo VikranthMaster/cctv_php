@@ -4,7 +4,7 @@ from pytz import timezone
 
 gate_model_path = '/home/pi/Downloads/person_gate_model/frozen_inference_graph.pb'
 stairs_model_path = '/home/pi/Downloads/person_stairs_model/frozen_inference_graph.pb'
-threshold = 0.9
+threshold = 0.8
 
 for photo_root in photo_root_dirs:
     if "StairsPhotos" in photo_root:

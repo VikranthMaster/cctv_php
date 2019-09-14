@@ -11,7 +11,16 @@ arsort($date_dirs);
 
 <html>
 <title><?php echo "$CAMERA Photos ($DATE)"?></title>
-<head><h1><center><a href='./index.php'><?php echo $CAMERA ?>Photos</a> <?php echo "($DATE)"?> </a></center></h1>
+<head><h1>
+<center>
+<a href='./index.php'><?php echo $CAMERA ?>Photos</a> 
+<?php echo "($DATE)"?>
+<?php
+if(file_exists("$HDD_ROOT/training")) {
+    echo "<a href='./train.php?camera=$CAMERA&date=$DATE'>[Train]</a>";
+}?>
+
+</center></h1>
     <style>
         div.gallery {
             margin: 5px;
