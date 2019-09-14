@@ -34,3 +34,5 @@ for photo_root in photo_root_dirs:
                 continue
             runPersonDetect(photo_root,date_dir,hr_dir,odapi,threshold)
             open(os.path.join(cur_dir,'person_detect_us.done'), 'a').close()
+
+addMarkerLine()
