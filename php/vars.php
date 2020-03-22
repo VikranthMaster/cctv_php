@@ -1,7 +1,7 @@
 <?php
-$HDD_ROOT = "/mnt/hdd";
-$GATE_PHOTO_DIR = $HDD_ROOT."/GatePhotos";
-$STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsPhotos";
+$HDD_ROOT = "/mnt/hdd/tmp";
+$GATE_PHOTO_DIR = $HDD_ROOT."/GateCamera";
+$STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsCamera";
 $GATE_VIDEO_DIR = $HDD_ROOT."/GateVideos";
 $STAIRS_VIDEO_DIR = $HDD_ROOT."/StairsVideos";
 
@@ -18,6 +18,7 @@ function HumanSize($Bytes)
 }
 
 function getPersonImages($root_dir){
+    $root_dir = $root_dir."/jpg";
     $p_images = [];
     if(file_exists("$root_dir/person.txt")){
         $person_file = fopen("$root_dir/person.txt","r");
@@ -42,6 +43,7 @@ function getPersonImages($root_dir){
 
 function getOtherImages($root_dir){
     $o_images = [];
+    $root_dir = $root_dir."/jpg";
     if(file_exists("$root_dir/others.txt")){
         $other_file = fopen("$root_dir/others.txt","r");
         while(!feof($other_file)){
@@ -52,7 +54,8 @@ function getOtherImages($root_dir){
         }
         fclose($other_file);
     }else{
-        $all_images = glob("$root_dir/*.jpg");
+	$all_images = glob("$root_dir/{,*/,*/*/,*/*/*/}*.jpg", GLOB_BRACE);
+        #$all_images = glob("$root_dir/*.jpg");
         $p_images = getPersonImages($root_dir);
         $o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
         $o_images = array_map("basename",$o_images);
@@ -70,7 +73,7 @@ function videosExists(){
 function getThumbImage($CAMERA, $DATE, $HOUR){
     global $GATE_PHOTO_DIR;
     global $STAIRS_PHOTO_DIR;
-    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
+    $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
     $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
 
     $p_images = getPersonImages("$cam_dir/$DATE/$HOUR");
@@ -84,7 +87,7 @@ function getThumbImage($CAMERA, $DATE, $HOUR){
         $img = current($o_images);
     }
 
-    $thumb_img = "./$cam/$DATE/$HOUR/$img";
+    $thumb_img = "./$cam/$DATE/$HOUR/jpg/$img";
     if(file_exists("$cam_dir/$DATE/$HOUR/thumbnails/$img")){
         $thumb_img = "./$cam/$DATE/$HOUR/thumbnails/$img";
     }

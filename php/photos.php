@@ -4,7 +4,7 @@ require_once('authorize.php');
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
-$date_dirs = array_filter(glob($photo_dir."/$DATE/*"), 'is_dir');
+$date_dirs = $CAMERA=="Gate"? array_filter(glob($photo_dir."/$DATE/*"), 'is_dir') : array_filter(glob($photo_dir."/$DATE/*/jpg/*"), 'is_dir');
 arsort($date_dirs);
 ?>
 

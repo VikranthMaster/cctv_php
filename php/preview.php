@@ -104,8 +104,8 @@ echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\">All (
 echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($p_images as $index => $img){
-    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
-    $img_link = "./$cam/$DATE/$HOUR/$img";
+    $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
+    $img_link = "./$cam/$DATE/$HOUR/jpg/$img";
     $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
     if(!file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$img")){
         $thumb_link = $img_link;
@@ -121,8 +121,8 @@ echo '</div>';
 echo "<div id='Other' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($o_images as $index => $img){
-    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
-    $img_link = "./$cam/$DATE/$HOUR/$img";
+    $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
+    $img_link = "./$cam/$DATE/$HOUR/jpg/$img";
     $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
     if(!file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$img")){
         $thumb_link = $img_link;
@@ -138,8 +138,8 @@ echo '</div>';
 echo "<div id='All' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($all_images as $index => $img){
-    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
-    $img_link = "./$cam/$DATE/$HOUR/$img";
+    $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
+    $img_link = "./$cam/$DATE/$HOUR/jpg/$img";
     $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$img";
     if(!file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$img")){
         $thumb_link = $img_link;
