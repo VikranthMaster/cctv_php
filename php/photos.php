@@ -68,13 +68,14 @@ foreach($date_dirs as $k => $v){
     $hour = basename($v);
 
     $p_images = getPersonImages($v);
-    $o_images = getOtherImages($v);
+    $o_images = getOtherImages($CAMERA, $DATE, $hour);
 
     $p_count = count($p_images);
     $o_count = count($o_images);
     $t_count = $p_count + $o_count;
 
     $thumb_link = getThumbImage($CAMERA,$DATE,$hour);
+	$thumb_link = "./".getRelativePath($HDD_ROOT, $thumb_link);
 
     echo "<div class='gallery''>\n";
     echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
