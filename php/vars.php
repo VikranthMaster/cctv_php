@@ -1,5 +1,6 @@
 <?php
-$HDD_ROOT = "/mnt/hdd/tmp" ; #"/Applications/XAMPP/xamppfiles/htdocs/cctv";
+$HDD_ROOT = "/mnt/hdd/tmp";
+$CACHE_ROOT = "/mnt/hdd/tmp/cache";
 $GATE_PHOTO_DIR = $HDD_ROOT."/GateCamera";
 $STAIRS_PHOTO_DIR = $HDD_ROOT."/StairsCamera";
 $GATE_VIDEO_DIR = $HDD_ROOT."/GateVideos";
@@ -105,9 +106,29 @@ function videosExists(){
     return file_exists($GATE_VIDEO_DIR);
 }
 
+function getThumbnailPath($CAMERA, $DATE, $HOUR, $IMG){
+    global $HDD_ROOT;
+    global $CACHE_ROOT;
+    $thumbPath = str_replace($HDD_ROOT, $CACHE_ROOT, $IMG);
+    $index = strpos($thumbPath,$DATE);
+    $thumbPath = substr($thumbPath, 0, $index).$DATE."/".$HOUR;
+    if ($CAMERA=="Gate") {
+        $thumbPath = $thumbPath."/".basename($IMG);
+    } else {
+        $sp = explode("/",$IMG);
+        $cnt = count($sp);
+        $thumbPath =  $thumbPath."/".($sp[$cnt-3].".".$sp[$cnt-2].".".$sp[$cnt-1]);
+    }
+    
+    return $thumbPath;
+
+}
+
 function getThumbImage($CAMERA, $DATE, $HOUR){
     global $GATE_PHOTO_DIR;
     global $STAIRS_PHOTO_DIR;
+    global $HDD_ROOT;
+    global $CACHE_ROOT;
     $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
     $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
 
@@ -122,10 +143,12 @@ function getThumbImage($CAMERA, $DATE, $HOUR){
         $img = current($o_images);
     }
 
-    $thumb_img = $img;
-    if(file_exists("$cam_dir/$DATE/$HOUR/thumbnails/$img")){
-        $thumb_img = "./$cam/$DATE/$HOUR/thumbnails/$img";
+    $thumb_img = getThumbnailPath($CAMERA, $DATE, $HOUR, $img);
+
+    if(!file_exists("$thumb_img")){
+        $thumb_img = $img;
     }
+
     return $thumb_img;
 }
 
