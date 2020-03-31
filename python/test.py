@@ -39,5 +39,5 @@ def fix_on_date(date_dir):
     for sub in get_sub_dirs(date_dir):
         fix_dir(os.path.join(date_dir,sub))
 
-fix_date = '/mnt/hdd/GatePhotos/2019-09-05'
+fix_date = '/mnt/hdd/GatePhotos/2019-09-04'
 fix_on_date(fix_date)

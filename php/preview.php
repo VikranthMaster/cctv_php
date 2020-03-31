@@ -134,7 +134,7 @@ foreach($o_images as $index => $img){
     #}
 
     $img_link = ".".getRelativePath($HDD_ROOT, $img);
-    $thumb_link = getThumbImage($CAMERA,$DATE,$HOUR);
+    $thumb_link = getThumbnailPath($CAMERA,$DATE,$HOUR,$img);
 	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
                                      
     echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";
@@ -156,7 +156,7 @@ foreach($all_images as $index => $img){
     #}
 
     $img_link = ".".getRelativePath($HDD_ROOT, $img);
-    $thumb_link = getThumbImage($CAMERA,$DATE,$HOUR);
+    $thumb_link = getThumbnailPath($CAMERA,$DATE,$HOUR,$img);
 	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
     
     echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";

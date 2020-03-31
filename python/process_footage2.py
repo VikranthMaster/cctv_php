@@ -1,9 +1,10 @@
 #!/usr/bin/python
 import os.path
 from shared import *
+import enum
 
 ROOT_DIR = "/mnt/hdd/tmp"
-CACHE_DIR = "/mnt/hdd/cache" 
+CACHE_DIR = "/mnt/hdd/tmp/cache" 
 
 GATE_DIR = os.path.join(ROOT_DIR, "GateCamera")
 STAIRS_DIR = os.path.join(ROOT_DIR, "StairsCamera")
