@@ -26,12 +26,15 @@ if($int_hour!="23"){
 echo "<div style='margin: auto; width: 250px;'>";
 echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR&tag=person'>Photos</a>&emsp;&emsp;<a href='./video_preview.php?camera=$other_cam&date=$DATE&hour=$HOUR'>$other_cam</a></div></h2>";
 
-$video_dir = $CAMERA=="Gate"? $GATE_VIDEO_DIR : $STAIRS_VIDEO_DIR;
-$video_dir .= "/$DATE/$HOUR";
+$video_dir = $CAMERA=="Gate"? "$GATE_PHOTO_DIR/$DATE/$HOUR/mp4" : "$STAIRS_PHOTO_DIR/$DATE";
 $all_videos = glob("$video_dir/*.mp4");
+if ($CAMERA!="Gate") {
+    $all_videos = glob("$video_dir/*/dav/$int_hour/*.mp4");
+}
 foreach($all_videos as $index => $vid){
     $vid_name = basename($vid);
-    echo "<h2><a href='./$CAMERA"."Videos/$DATE/$HOUR/$vid_name'>$vid_name</a> (".HumanSize(filesize($vid)).")</h2>";
+	$video_link = ".".getRelativePath($HDD_ROOT, $vid);
+    echo "<h2><a href='$video_link'>$vid_name</a> (".HumanSize(filesize($vid)).")</h2>";
 }
 
 echo '</body></html>';

@@ -4,8 +4,8 @@ require 'vars.php';
 
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
-$video_dir = $CAMERA=="Gate"? $GATE_VIDEO_DIR : $STAIRS_VIDEO_DIR;
-$date_dirs = array_filter(glob($video_dir."/$DATE/*"), 'is_dir');
+$photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
+$date_dirs = $CAMERA=="Gate"? array_filter(glob($photo_dir."/$DATE/*"), 'is_dir') : array_filter(glob($photo_dir."/$DATE/*/dav/*"), 'is_dir');
 arsort($date_dirs);
 ?>
 
@@ -58,10 +58,14 @@ $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
     $all_videos = glob("$v/*.mp4");
+    if($CAMERA=="Gate") {
+        $all_videos = glob("$v/mp4/*.mp4");
+    }
     $video_count = count($all_videos);
     if($video_count==0) continue;
 
     $thumb_link = getThumbImage($CAMERA,$DATE,$hour);
+	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
 
     echo "<div class='gallery''>\n";
     echo "<a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";

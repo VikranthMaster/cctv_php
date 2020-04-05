@@ -67,7 +67,7 @@ echo "<div style='margin: auto; width: 250px;'><a href='./photos.php?camera=$oth
 foreach($date_dirs as $k => $v){
     $hour = basename($v);
 
-    $p_images = getPersonImages($v);
+    $p_images = getPersonImages($CAMERA, $DATE, $hour);
     $o_images = getOtherImages($CAMERA, $DATE, $hour);
 
     $p_count = count($p_images);

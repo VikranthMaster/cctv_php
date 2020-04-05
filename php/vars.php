@@ -14,10 +14,6 @@ function printArray($values)
 }
 
 function getRelativePath($base, $path) {
-    // Detect directory separator
-    #echo("Base: $base<br>");
-    #echo("Path: $path<br>");
-    
 	$separator = substr($base, 0, 1);
     $base = array_slice(explode($separator, rtrim($base,$separator)),1);
     $path = array_slice(explode($separator, rtrim($path,$separator)),1);
@@ -39,10 +35,42 @@ function HumanSize($Bytes)
     return(sprintf('%1.2f' , $Bytes)." ".$Type[$Index]);
 }
 
-function getPersonImages($root_dir){
+function getCacheDir($CAMERA, $DATE, $HOUR){
+    global $HDD_ROOT;
+    global $CACHE_ROOT;
+    global $GATE_PHOTO_DIR;
+    global $STAIRS_PHOTO_DIR;
+	$cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
+    $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
+    $cam_dir = str_replace($HDD_ROOT, $CACHE_ROOT, $cam_dir);
+	$root_dir = "$cam_dir/$DATE/$HOUR";
+    return $root_dir;
+}
+
+function getImages($CAMERA, $DATE, $HOUR){
+	global $GATE_PHOTO_DIR;
+    global $STAIRS_PHOTO_DIR;
+	$cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
+    $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
+	$root_dir = "$cam_dir/$DATE";
+	if ($CAMERA=="Gate") {
+		$root_dir = $root_dir."/$HOUR";
+	}
+
+    $all_images = glob("$root_dir/{,*/,*/*/,*/*/*/}*.jpg", GLOB_BRACE);
+		
+    if($CAMERA!="Gate"){
+        $all_images = glob("$root_dir/*/jpg/$HOUR/*/*.jpg", GLOB_BRACE);
+    }
+		
+    return $all_images;
+}
+
+function getPersonImages($CAMERA, $DATE, $HOUR){
+    $cache_dir = getCacheDir($CAMERA, $DATE, $HOUR);
     $p_images = [];
-    if(file_exists("$root_dir/person.txt")){
-        $person_file = fopen("$root_dir/person.txt","r");
+    if(file_exists("$cache_dir/person.txt")){
+        $person_file = fopen("$cache_dir/person.txt","r");
         while(!feof($person_file)){
             $line = rtrim(fgets($person_file));
             if (strpos($line, " ") !== false) {
@@ -54,28 +82,15 @@ function getPersonImages($root_dir){
         }
         fclose($person_file);
     }
-    if(file_exists("$root_dir/persons")){
-        $p_images = glob("$root_dir/persons/*.jpg");
-        $p_images = array_map("basename",$p_images);
-    }
     sort($p_images);
     return $p_images;
 }
 
 function getOtherImages($CAMERA, $DATE, $HOUR){
-	global $GATE_PHOTO_DIR;
-    global $STAIRS_PHOTO_DIR;
-	$cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
-    $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
-	$root_dir = "$cam_dir/$DATE";
-	if ($CAMERA=="Gate") {
-		$root_dir = $root_dir."/$HOUR";
-	}
-	
-	#echo "Calling getOtherImages: $root_dir<br>";
+    $cache_dir = getCacheDir($CAMERA, $DATE, $HOUR);
     $o_images = [];
-    if(file_exists("$root_dir/others.txt")){
-        $other_file = fopen("$root_dir/others.txt","r");
+    if(file_exists("$cache_dir/others.txt")){
+        $other_file = fopen("$cache_dir/others.txt","r");
         while(!feof($other_file)){
             $line = rtrim(fgets($other_file));
             if($line!=''){
@@ -84,20 +99,10 @@ function getOtherImages($CAMERA, $DATE, $HOUR){
         }
         fclose($other_file);
     }else{
-		$all_images = glob("$root_dir/{,*/,*/*/,*/*/*/}*.jpg", GLOB_BRACE);
-		
-		if($CAMERA!="Gate"){
-			$all_images = glob("$root_dir/*/jpg/$HOUR/*/*.jpg", GLOB_BRACE);
-		}
-		
-        #$all_images = glob("$root_dir/*.jpg");
-        $p_images = getPersonImages($root_dir);
-        $o_images = array_flip(array_diff_key(array_flip($all_images),array_flip($p_images)));
-        #$o_images = array_map("basename",$o_images);
+		$o_images = getImages($CAMERA, $DATE, $HOUR);
     }
 
     sort($o_images);
-    #printArray($o_images);
     return $o_images;
 }
 
@@ -132,7 +137,7 @@ function getThumbImage($CAMERA, $DATE, $HOUR){
     $cam = $CAMERA=="Gate"?"GateCamera":"StairsCamera";
     $cam_dir = $CAMERA=="Gate"?$GATE_PHOTO_DIR:$STAIRS_PHOTO_DIR;
 
-    $p_images = getPersonImages("$cam_dir/$DATE/$HOUR");
+    $p_images = getPersonImages($CAMERA, $DATE, $HOUR);
     reset($p_images);
     $img = current($p_images);
 

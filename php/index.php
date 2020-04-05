@@ -33,10 +33,8 @@ $per_full = sprintf('%1.2f' , $per_full)
         <th><h2>Gate Photos</h2></th>
         <th><h2>Stairs Photos</h2></th>
         <?php
-        if(videosExists()){
-            echo "<th><h2>Gate Videos</h2></th>";
-            echo "<th><h2>Stairs Videos</h2></th>";
-        }
+        echo "<th><h2>Gate Videos</h2></th>";
+        echo "<th><h2>Stairs Videos</h2></th>";
         echo '</tr>';
         $dirs = array_filter(glob($GATE_PHOTO_DIR."/*"), 'is_dir');
         arsort($dirs);
@@ -49,20 +47,13 @@ $per_full = sprintf('%1.2f' , $per_full)
             }else{
                 echo "<td><h2>Not Available</h2></td>";
             }
-            if(file_exists("$GATE_VIDEO_DIR/$v")){
-                echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
-            }else{
-                if(videosExists()) {
-                    echo "<td><h2>Not Available</h2></td>";
-                }
-            }
-            if(file_exists("$STAIRS_VIDEO_DIR/$v")){
+            echo "<td><h2><a href='./videos.php?camera=Gate&date=$v'> $v </a></h2></td>";
+            if(file_exists("$STAIRS_PHOTO_DIR/$v")){
                 echo "<td><h2><a href='./videos.php?camera=Stairs&date=$v'> $v </a></h2></td>";
             }else{
-                if(videosExists()) {
-                    echo "<td><h2>Not Available</h2></td>";
-                }
+                echo "<td><h2>Not Available</h2></td>";
             }
+
             echo '</tr>';
         }
         echo '</table>';
