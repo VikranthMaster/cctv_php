@@ -102,9 +102,9 @@ $all_images = array_merge($p_images,$o_images);
 sort($all_images);
 
 
-echo "<button class='tablink' onclick=\"openPage('Persons', this, '#5DADE2')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
+echo "<button class='tablink' onclick=\"openPage('Persons', this, '#5DADE2')\">Persons (".count($p_images).")</button>\n";
 echo "<button class='tablink' onclick=\"openPage('Other', this, '#5DADE2')\">Other (".count($o_images).") </button>\n";
-echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\">All (".count($all_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\" id='defaultOpen'>All (".count($all_images).") </button>\n";
 
 echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
