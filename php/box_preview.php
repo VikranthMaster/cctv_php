@@ -6,7 +6,6 @@ $DATE = $_GET["date"];
 $HOUR = $_GET["hour"];
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +29,8 @@ if($int_hour!="23"){
 }
 echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR'>$other_cam</a></div></h2>\n";
 
-$photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
-$photo_dir .= "/$DATE/$HOUR";
-$p_images = getPersonImages($photo_dir);
+$photo_dir = getCacheDir($CAMERA, $DATE, $HOUR);
+$p_images = getPersonImages($CAMERA, $DATE, $HOUR);
 
 if(file_exists("$photo_dir/person.txt")){
     $person_file = fopen("$photo_dir/person.txt","r");
@@ -44,8 +42,8 @@ if(file_exists("$photo_dir/person.txt")){
             $f_name = explode(" ", $line)[0];
             $boxes = rtrim(substr($line,strlen($f_name)+1));
 
-            $img_link = "./$cam/$DATE/$HOUR/$f_name";
-            $thumb_link = "./$cam/$DATE/$HOUR/thumbnails/$f_name";
+            $img_link = ".".getRelativePath($HDD_ROOT, $f_name);
+            $thumb_link = getThumbnailPath($CAMERA, $DATE, $HOUR, $f_name);
             if(file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$f_name")){
                 $img_link = $thumb_link;
             }

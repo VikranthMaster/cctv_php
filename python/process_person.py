@@ -17,7 +17,7 @@ def person_detect(odapi,camera, date, hr, hrDir):
     imgs = getImages(camera, hrDir)
 
     start_time = time.time()
-    threshold = 0.6
+    threshold = 0.45
     p_images = []
     p_only_images = []
 
