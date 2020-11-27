@@ -1,5 +1,10 @@
 <?php
-include ('dbcommon.php');
+include ('conn.php');
+include ('queries.php');
+
+// Change below two lines to test query
+$cols = array("Camera", "Date", "PhotoCount");
+$values = runQuery($get_summary_query, $cols);
 ?>
 
 <!DOCTYPE html>
@@ -21,30 +26,22 @@ include ('dbcommon.php');
 <body>
 		<table>
 			<tr>
-			<th><h2>Camera</th>
-			<th><h2>Date</th>
-			<th><h2>Photo Count</th>
-		</tr>
+<?php
+    foreach($cols as $k => $v) {
+	echo "<th><h2>$v</th>\n";		
+    }?>
+			</tr>
      
     <?php
-    $conn = getConn();
-    $result = mysqli_query($conn, $get_summary_query);
-    if (is_bool($result) && (mysqli_num_rows($result) == 0)) {
-        // print($error_msg, "Query ERROR: Failed to get summary data<br>" . __FILE__ ." line:". __LINE__ );
+    foreach($values as $k1 => $v1) {
+	echo "<tr>\n";
+	foreach($v1 as $k2 => $v2) {
+	    echo "<td><h3>$v2</td>\n";
+	}
+	echo "</tr>\n";
     }
-    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        ?>
-
-    <tr>
-			<td><h3><?php echo $row["camName"]; ?></td>
-			<td><h3><?php echo $row["date"]; ?></td>
-			<td><h3><?php echo $row["count"];?></td>
-		</tr>
+?>
    
-   <?php
-   }
-   mysql_close($conn);?>
-   	
 	</table>
 </body>
 </html>

@@ -275,6 +275,15 @@ $get_dates_query = "
 			order by date desc;
 		   ";
 
+$get_summary_query = "
+			select c.name as Camera, cd.date as Date, count(*) as PhotoCount
+            from cctv.Photo
+            join cctv.CameraDate as cd on cameraDateID=cd.UID
+            join cctv.Camera as c on cameraID=c.UID
+            group by cameraDateID
+			order by date DESC;
+		   ";
+
 $add_holiday_query = "
             INSERT into pricepalace.holidays (date,name)
             VALUES (?, ?) as new

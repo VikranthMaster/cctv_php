@@ -1,9 +1,10 @@
 <?php
-include ('dbcommon.php');
+include ('conn.php');
+include ('queries.php');
 
 // Change below two lines to test query
-$cols = array("date");
-$values = runQuery($get_dates_query, $cols);
+$cols = array("Camera", "Date", "PhotoCount");
+$values = runQuery($get_summary_query, $cols);
 ?>
 
 <!DOCTYPE html>
