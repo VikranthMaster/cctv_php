@@ -268,11 +268,13 @@ $add_date_query = "
             INSERT IGNORE INTO pricepalace.date(date) VALUES (?);
             ";
 
-$get_all_dates = "
-                SELECT date FROM cctv.CameraDate 
-                GROUP BY date ORDER BY date DESC;
-            ";
-    
+$get_dates_query = "
+			select cd.date as date
+			from cctv.CameraDate as cd
+			group by date
+			order by date desc;
+		   ";
+
 $add_holiday_query = "
             INSERT into pricepalace.holidays (date,name)
             VALUES (?, ?) as new
