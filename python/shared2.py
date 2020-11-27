@@ -44,6 +44,13 @@ def getHourDirs(camera, date):
                 hourDirs.append(os.path.join(tmpFull,hrDir))
     return hourDirs
 
+def findFiles(rootDir, ext):
+    imgs = []
+    for img in  glob.iglob(rootDir+ '/**/*.' + ext, recursive=True):
+        imgs.append(img)
+        
+    return imgs
+
 def getImages(cam, hoursDir):
     imgs = []
     if cam==Cameras.Gate:
@@ -81,7 +88,7 @@ def generateThumbNail(camera, date, hr, img):
         cv2_img = cv2.resize(cv2_img, (640, 360))
         cv2.imwrite(targetImgPath, cv2_img)
     except:
-            log_message("Error saving thumbnail:"+img)
+        log_message("Error saving thumbnail:"+img)
             
 
 def getCacheDirDt(camera, date):

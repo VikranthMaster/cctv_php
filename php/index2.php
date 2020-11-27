@@ -1,6 +1,14 @@
 <?php
 require_once('authorize.php');
 require 'vars.php';
+include ('dbcommon.php');
+
+$conn = getConn();
+$result = mysqli_query($conn, $get_dates_query);
+$dates = array();
+while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+    array_push($dates, $row["date"]);
+}
 
 $free_space = HumanSize(disk_free_space($HDD_ROOT));
 $per_full = (1- disk_free_space($HDD_ROOT)/disk_total_space($HDD_ROOT))*100;
@@ -36,9 +44,7 @@ $per_full = sprintf('%1.2f' , $per_full)
         echo "<th><h2>Gate Videos</h2></th>";
         echo "<th><h2>Stairs Videos</h2></th>";
         echo '</tr>';
-        $dirs = array_filter(glob($GATE_PHOTO_DIR."/*"), 'is_dir');
-        arsort($dirs);
-        foreach($dirs as $k => $v){
+        foreach($dates as $k => $v){
             $v = basename($v);
             echo '<tr>';
             echo "<td><h2><a href='./photos.php?camera=Gate&date=$v'> $v </a></h2></td>";
