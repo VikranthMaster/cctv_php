@@ -3,7 +3,7 @@ include ('conn.php');
 include ('queries.php');
 
 // Change below two lines to test query
-$cols = array("Camera", "Date", "PhotoCount");
+$cols = array("Date", "GatePerson", "GateTotal", "StairsPerson", "StairsTotal");
 $values = runQuery($get_summary_query, $cols);
 ?>
 
