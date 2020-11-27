@@ -47,9 +47,9 @@ $per_full = sprintf('%1.2f' , $per_full)
         ?>
    		<tr>
 			<td><h2><a href='./photos.php?camera=Gate&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
-			<td><h2><a href='./photos.php?camera=Gate&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
+			<td><h2><a href='./photos.php?camera=Stairs&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
 			<td><h2><a href='./videos.php?camera=Gate&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
-			<td><h2><a href='./videos.php?camera=Gate&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
+			<td><h2><a href='./videos.php?camera=Stairs&date=<?php echo $row["date"]; ?>'><?php echo $row["date"]; ?> </a></h2></td>
 		</tr>
    
    <?php } ?>
