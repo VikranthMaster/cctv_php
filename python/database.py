@@ -5,10 +5,10 @@ import mariadb
 from shared import *
 
 USER = "root"
-PASSWORD = ""
+PASSWORD = "password"
 HOST = "localhost"
 PORT = 3306
-DATABSE = "cctv"
+DATABSE = "cctv2"
 
 def getDBConnection():
     # Connect to MariaDB Platform
@@ -24,19 +24,49 @@ def getDBConnection():
     except mariadb.Error as e:
         print("Error connecting to MariaDB Platform: {}".format(e))
 
-def addDateToDB(date):
-    # Connect to MariaDB Platform
+def getCameraRecords():
     try:
         conn = getDBConnection()
     
         # Get Cursor
         cur = conn.cursor()
-        cur.execute("INSERT IGNORE INTO Date(date) values(?)", (date))
+        cur.execute("SELECT name, rootdir, cachedir FROM Camera")
+        result = cur.fetchall()
+        conn.close()
+        return result 
+    
+    except mariadb.Error as e:
+        print("Error adding date to DB: {}".format(e))
+
+def addDateToDB(date):
+    try:
+        conn = getDBConnection()
+    
+        # Get Cursor
+        cur = conn.cursor()
+        cur.execute("INSERT IGNORE INTO Date(date) values(?)", (date,))
         conn.commit()
         conn.close()
     
     except mariadb.Error as e:
-        print("Error connecting to MariaDB Platform: {}".format(e))
+        print("Error adding date to DB: {}".format(e))
 
-addDateToDB("2020-12-12")
+def addCameraDateToDB(camera, date):
+    addDateToDB(date)
+    try:
+        conn = getDBConnection()
+    
+        # Get Cursor
+        cur = conn.cursor()
+        cur.execute(""" INSERT IGNORE INTO CameraDate(cameraID, dateID) values(
+				(SELECT UID from Camera where name=?),
+				(SELECT UID from Date where date=?))
+                    """, (camera, date))
+        conn.commit()
+        conn.close()
+    
+    except mariadb.Error as e:
+        print("Error adding CameraDate to DB: {}".format(e))
 
+#addCameraDateToDB("Gate", "2010-11-11")
+print(getCameraRecords())
