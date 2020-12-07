@@ -2,8 +2,9 @@
 
 // Get all available dates for footage
 $get_dates_query = "
-			select cd.date as date
-			from cctv.CameraDate as cd
+			select d.date as date
+			from cctv2.CameraDate as cd
+			join cctv2.Date as d on d.UID=cd.dateID
 			group by date
 			order by date desc;
 		   ";
@@ -33,11 +34,12 @@ $get_summary_query = "
 
 // Get Temperature report
 $get_temperature_query = "
-            select date(time) as Date,
+            select date as Date,
                    MIN(temp) as MinTemperature,
                    MAX(temp) as MaxTemperature,
-                   AVG(temp) as AvgTemperature
-            from cctv.Temperature
+                   FORMAT(AVG(temp),2) as AvgTemperature
+            from cctv2.Temperature
+	    join cctv2.Date on dateID=UID
             group  by Date
             order by Date desc;
            ";
