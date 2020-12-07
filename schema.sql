@@ -45,7 +45,7 @@ CREATE TABLE CameraDate
       cameraID
    ),
    FOREIGN KEY (dateID) REFERENCES Date (UID),
-   FOREIGN KEY (cameraID) REFERENCES Date (UID)
+   FOREIGN KEY (cameraID) REFERENCES Camera (UID)
 );
 CREATE TABLE Photo
 (
@@ -108,3 +108,6 @@ CREATE TABLE Video
    ),
    FOREIGN KEY (cameraDateID) REFERENCES CameraDate (UID)
 );
+
+INSERT INTO Camera(name,rootdir, cachedir) VALUES("Gate", "/mnt/hdd/tmp/GateCamera", "/mnt/hdd/tmp/cache/GateCamera");
+INSERT INTO Camera(name,rootdir, cachedir) VALUES("Stairs", "/mnt/hdd/tmp/StairsCamera", "/mnt/hdd/tmp/cache/StairsCamera");
