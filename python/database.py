@@ -88,5 +88,3 @@ def addTemperatureToDB(date, time, temp):
 # addTemperatureToDB("2010-11-11", "11:30:01", 23.5)
 # addTemperatureToDB("2010-11-11", "11:35:01", 33.5)
 # print(getCameraRecords())
-cur_time = datetime.datetime.now()
-print(str(cur_time).split())
