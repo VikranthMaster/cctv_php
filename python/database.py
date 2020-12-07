@@ -48,18 +48,19 @@ def addDateToDB(date):
     except mariadb.Error as e:
         print("Error adding date to DB: {}".format(e))
 
-def addCameraDateToDB(camera, date):
-    addDateToDB(date)
+def addCameraDateToDB(cameraDates):
     try:
         conn = getDBConnection()
     
         # Get Cursor
         cur = conn.cursor()
-        cur.execute(""" 
-                        INSERT IGNORE INTO CameraDate(cameraID, dateID) VALUES(
+        for (camera,date) in cameraDates:
+            cur.execute("INSERT IGNORE INTO Date(date) values(?)", (date,))
+            cur.execute(""" 
+                            INSERT IGNORE INTO CameraDate(cameraID, dateID) VALUES(
 				                (SELECT UID from Camera where name=?),
 				                (SELECT UID from Date where date=?))
-                    """, (camera, date))
+                        """, (camera, date))
         conn.commit()
         conn.close()
     
