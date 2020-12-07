@@ -37,7 +37,7 @@ $get_temperature_query = "
                    MIN(temp) as MinTemperature,
                    MAX(temp) as MaxTemperature,
                    AVG(temp) as AvgTemperature
-            from Temperature
+            from cctv.Temperature
             group  by Date;
            ";
 
