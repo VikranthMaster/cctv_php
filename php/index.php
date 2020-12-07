@@ -76,5 +76,8 @@ th, td {
 	<h2>
 		<a href='./summary.php'> Summary </a>
 	</h2>
+    <h2>
+        <a href='./temperature.php'> Temperature </a>
+    </h2>
 </body>
 </html>

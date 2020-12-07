@@ -31,6 +31,16 @@ $get_summary_query = "
 	        order by date desc;
 		   ";
 
+// Get Temperature report
+$get_temperature_query = "
+            select date(time) as Date,
+                   MIN(temp) as MinTemperature,
+                   MAX(temp) as MaxTemperature,
+                   AVG(temp) as AvgTemperature
+            from Temperature
+            group  by Date;
+           ";
+
 // Get available hour for given Camera and Date.
 $get_hours = "
             select hour(p.time) from Photo as p

@@ -4,9 +4,9 @@ import time
 import mariadb
 from shared import *
 
-USER = "root"
-PASSWORD = "password"
-HOST = "localhost"
+USER = "sgudla"   # "root"
+PASSWORD = "Gsrini@1234"  # "password"
+HOST = "192.168.1.103"
 PORT = 3306
 DATABSE = "cctv2"
 
@@ -58,9 +58,10 @@ def addCameraDateToDB(camera, date):
     
         # Get Cursor
         cur = conn.cursor()
-        cur.execute(""" INSERT IGNORE INTO CameraDate(cameraID, dateID) values(
-				(SELECT UID from Camera where name=?),
-				(SELECT UID from Date where date=?))
+        cur.execute(""" 
+                        INSERT IGNORE INTO CameraDate(cameraID, dateID) VALUES(
+				                (SELECT UID from Camera where name=?),
+				                (SELECT UID from Date where date=?))
                     """, (camera, date))
         conn.commit()
         conn.close()
@@ -68,5 +69,24 @@ def addCameraDateToDB(camera, date):
     except mariadb.Error as e:
         print("Error adding CameraDate to DB: {}".format(e))
 
-#addCameraDateToDB("Gate", "2010-11-11")
+
+def addTemperatureToDB(date, time, temp):
+    addDateToDB(date)
+    try:
+        conn = getDBConnection()
+
+        # Get Cursor
+        cur = conn.cursor()
+        cur.execute(""" 
+                        INSERT INTO Temperature(dateID, time, temp) VALUES(
+				                (SELECT UID from Date where date=?), ?, ?)
+                    """, (date, time, temp))
+        conn.commit()
+        conn.close()
+
+    except mariadb.Error as e:
+        print("Error adding temperature to DB: {}".format(e))
+
+addCameraDateToDB("Gate", "2010-11-12")
+addTemperatureToDB("2010-11-11", "11:30:01", 23.5)
 print(getCameraRecords())

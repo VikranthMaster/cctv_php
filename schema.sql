@@ -3,7 +3,7 @@ USE cctv2;
 CREATE TABLE Date
 (
    UID INT NOT NULL auto_increment,
-   `date` date NOT NULL,
+   `date` date NOT NULL UNIQUE,
    PRIMARY KEY (UID)
 );
 CREATE TABLE Temperature
