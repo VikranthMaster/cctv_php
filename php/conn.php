@@ -19,7 +19,7 @@ function runQuery($query, $cols) {
     $conn = getConn();
     $result = mysqli_query($conn, $query);
     if (is_bool($result) && (mysqli_num_rows($result) == 0)) {
-        // print($error_msg, "Query ERROR: Failed to get summary data<br>" . __FILE__ ." line:". __LINE__ );
+//         print($error_msg, "Query ERROR: Failed to get summary data<br>" . __FILE__ ." line:". __LINE__ );
     }
     
     $values = array();

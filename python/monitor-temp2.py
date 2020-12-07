@@ -1,33 +1,6 @@
 import os
 import datetime
-import time
-import mariadb
-
-def addTempToDB(time, temp):
-    # Connect to MariaDB Platform
-    try:
-        conn = mariadb.connect(
-            user="root",
-            password="password",
-            host="localhost",
-            port=3306,
-            database="cctv")
-    
-        # Get Cursor
-        cur = conn.cursor()
-    
-        #insert information 
-        cur.execute("INSERT INTO Temperature VALUES (?, ?)", (time, temp)) 
-
-        #cur.execute("SELECT time, temp FROM Temperature")
-        #for time, temp in cur:
-        #    print ("T={}, Tp={}".format(time, temp))
-
-        conn.commit()
-        conn.close()
-    
-    except mariadb.Error as e:
-        print("Error connecting to MariaDB Platform: {}".format(e))
+from database import *
 
 def measure_temp():
         temp = os.popen("vcgencmd measure_temp").readline()
@@ -36,5 +9,6 @@ def measure_temp():
 
 cur_time = datetime.datetime.now()
 temp = measure_temp()
-addTempToDB(cur_time,temp)
+date_time = str(cur_time).split()
+addTemperatureToDB(date_time[0],date_time[1], temp)
 

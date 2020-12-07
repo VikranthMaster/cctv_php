@@ -1,12 +1,9 @@
-import os
-import datetime
-import time
 import mariadb
 from shared import *
 
-USER = "sgudla"   # "root"
-PASSWORD = "Gsrini@1234"  # "password"
-HOST = "192.168.1.103"
+USER = "root"
+PASSWORD = "password"
+HOST = "localhost"
 PORT = 3306
 DATABSE = "cctv2"
 
@@ -30,7 +27,7 @@ def getCameraRecords():
     
         # Get Cursor
         cur = conn.cursor()
-        cur.execute("SELECT name, rootdir, cachedir FROM Camera")
+        cur.execute("SELECT name as CameraName, rootdir as RootDir, cachedir as CacheDir FROM Camera")
         result = cur.fetchall()
         conn.close()
         return result 
@@ -87,6 +84,9 @@ def addTemperatureToDB(date, time, temp):
     except mariadb.Error as e:
         print("Error adding temperature to DB: {}".format(e))
 
-addCameraDateToDB("Gate", "2010-11-12")
-addTemperatureToDB("2010-11-11", "11:30:01", 23.5)
-print(getCameraRecords())
+# addCameraDateToDB("Gate", "2010-11-12")
+# addTemperatureToDB("2010-11-11", "11:30:01", 23.5)
+# addTemperatureToDB("2010-11-11", "11:35:01", 33.5)
+# print(getCameraRecords())
+cur_time = datetime.datetime.now()
+print(str(cur_time).split())

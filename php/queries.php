@@ -38,7 +38,8 @@ $get_temperature_query = "
                    MAX(temp) as MaxTemperature,
                    AVG(temp) as AvgTemperature
             from cctv.Temperature
-            group  by Date;
+            group  by Date
+            order by Date desc;
            ";
 
 // Get available hour for given Camera and Date.
