@@ -16,18 +16,20 @@ $get_summary_query = "
                     GateTotalCount as GateTotal, 
                     StairsPersonCount as StairsPerson, 
                     StairsTotalCount as StairsTotal
-            from (select cd.date as date , count(d.objectID) as GatePersonCount, count(p.filepath) as GateTotalCount
-                    from cctv.Photo as p
-                    join cctv.CameraDate as cd on cd.UID = cameraDateID
-                    join cctv.Camera as c on c.UID = cd.cameraID
-                    left join cctv.Detection as d on d.photoID=p.UID
+            from (select dt.date as date , count(d.objectID) as GatePersonCount, count(p.filepath) as GateTotalCount
+                    from cctv2.Photo as p
+                    join cctv2.CameraDate as cd on cd.UID = cameraDateID
+                    join cctv2.Date as dt on dt.UID=cd.dateID
+                    join cctv2.Camera as c on c.UID = cd.cameraID
+                    left join cctv2.Detection as d on d.photoID=p.UID
                     where c.UID = 1 group by date order by date) as Gate
             natural join
-                 (select cd.date as date , count(d.objectID) as StairsPersonCount, count(p.filepath) as StairsTotalCount
-                    from cctv.Photo as p
-                    join cctv.CameraDate as cd on cd.UID = cameraDateID
-                    join cctv.Camera as c on c.UID = cd.cameraID
-                    left join cctv.Detection as d on d.photoID=p.UID
+                 (select dt.date as date , count(d.objectID) as StairsPersonCount, count(p.filepath) as StairsTotalCount
+                    from cctv2.Photo as p
+                    join cctv2.CameraDate as cd on cd.UID = cameraDateID
+					join cctv2.Date as dt on dt.UID=cd.dateID
+                    join cctv2.Camera as c on c.UID = cd.cameraID
+                    left join cctv2.Detection as d on d.photoID=p.UID
                     where c.UID = 2 group by date order by date) as Stairs
 	        order by date desc;
 		   ";
