@@ -46,8 +46,8 @@ def addFootage():
         curDate = getCurrentDate()
 
         for camID, camDateID, date, rootDir in camDates:
-            # if curDate!=date:
-            #     cur.execute("UPDATE CameraDate SET fetched = TRUE WHERE UID=?", (camDateID,))
+            if curDate!=date:
+                cur.execute("UPDATE CameraDate SET fetched = TRUE WHERE UID=?", (camDateID,))
                 
             print ("CamDateID={}, Date={}, Root={}".format(camDateID, date, rootDir))
             photos = findFiles(os.path.join(rootDir, date), "jpg")
@@ -62,11 +62,10 @@ def addFootage():
                 relPath = os.path.relpath(video, os.path.join(rootDir,date))
                 size = os.path.getsize(video)
                 timestamp, duration = getVideoTimeStamp(camID, date, relPath)
-                cur.execute("INSERT IGNORE INTO Video(cameraDateID, filepath, time, size, duration) values(?,?,?,?)", (camDateID, relPath, timestamp, size, duration))
+                cur.execute("INSERT IGNORE INTO Video(cameraDateID, filepath, time, size, duration) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, duration))
 
             print ("{} photos added on {}".format(len(photos), date))
             print ("{} videos added on {}".format(len(videos), date))
-            break
 
         conn.commit()
         conn.close()
