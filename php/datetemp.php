@@ -6,7 +6,7 @@ echo $DATE;
 
 // Change below two lines to test query
 $cols = array("Hour", "MinTemperature", "MaxTemperature", "AvgTemperature");
-$values = runQuery($get_datetemp_query, $cols);
+$values = runQueryWithArg($get_datetemp_query, $DATE, $cols);
 ?>
 
 <!DOCTYPE html>

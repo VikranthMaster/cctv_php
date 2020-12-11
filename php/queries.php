@@ -46,6 +46,17 @@ $get_temperature_query = "
             order by Date desc;
            ";
 
+// Get Temperature report
+$get_datetemp_query = "
+            select hour(time) as Hour, 
+                      MIN(temp) as MinTemperature, 
+                      MAX(temp) as MaxTemperature, 
+                      FORMAT(AVG(temp),2) as AvgTemperature 
+                from cctv2.Temperature
+	            where dateID = (select UID from cctv2.Date where date=?)
+                group by Hour;
+           ";
+
 // Get available hour for given Camera and Date.
 $get_hours = "
             select hour(p.time) from Photo as p
