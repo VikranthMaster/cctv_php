@@ -36,7 +36,11 @@ $values = runQuery($get_temperature_query, $cols);
     foreach($values as $k1 => $v1) {
 	echo "<tr>\n";
 	foreach($v1 as $k2 => $v2) {
-	    echo "<td><h3>$v2</td>\n";
+	    if ($k2==0) {
+	    	echo "<td><h3><a href='./datetemp.php?date=$v2'>$v2</a></td>\n";
+	    } else {
+	    	echo "<td><h3>$v2</td>\n";
+	    }
 	}
 	echo "</tr>\n";
     }
