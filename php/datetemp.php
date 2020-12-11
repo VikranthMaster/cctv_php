@@ -2,7 +2,6 @@
 include ('conn.php');
 include ('queries.php');
 $DATE = $_GET["date"];
-echo $DATE;
 
 // Change below two lines to test query
 $cols = array("Hour", "MinTemperature", "MaxTemperature", "AvgTemperature");
