@@ -58,9 +58,11 @@ def addDetections():
                     # print("PhotID={}".format(photoID))
                     # print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
                     cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(photoID, 1, sp[1], sp[2], sp[3], sp[4], sp[5]))
-                print (per)
+                # print (per)
 
-            cur.execute("UPDATE CameraDate SET processed = TRUE WHERE UID=?", (camDateID,))
+            curDate = getCurrentDate()
+            if curDate!=Date:
+                cur.execute("UPDATE CameraDate SET processed = TRUE WHERE UID=?", (CamDateID,))
             break
 
         conn.commit()
