@@ -55,15 +55,13 @@ def addDetections():
                     cur.close()
                     cur = conn.cursor()
                     photoID = r[0][0]
-                    print("PhotID={}".format(photoID))
-                    print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
+                    # print("PhotID={}".format(photoID))
+                    # print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
                     cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(photoID, 1, sp[1], sp[2], sp[3], sp[4], sp[5]))
                 print (per)
-                break
 
+            cur.execute("UPDATE CameraDate SET processed = TRUE WHERE UID=?", (camDateID,))
             break
-            print ("UID={}, Thummpath={}".format(UID, thumbpath))
-            # cur.execute("UPDATE Photo SET thumbnail = ? WHERE UID=?",(thumbpath,UID))
 
         conn.commit()
         conn.close()
