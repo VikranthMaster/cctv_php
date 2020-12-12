@@ -46,14 +46,16 @@ def addDetections():
                    continue
                 f = open(per,'r')
                 for line in f.readlines():
-                    print(line)
+                    #print(line)
                     sp = line.split()
                     ts = getPhotoTimeStamp(CamID, str(Date),sp[0])
-                    print("CamDateID={}, Timestamp={}".format(CamDateID,ts))
+                    #print("CamDateID={}, Timestamp={}".format(CamDateID,ts))
                     cur.execute("SELECT UID from Photo WHERE cameraDateID=? and time=?", (CamDateID,ts))
                     r = cur.fetchall()
                     cur.close()
                     cur = conn.cursor()
+                    if(len(r)==0):
+                        continue
                     photoID = r[0][0]
                     # print("PhotID={}".format(photoID))
                     # print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
