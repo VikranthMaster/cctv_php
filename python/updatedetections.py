@@ -63,9 +63,10 @@ def addDetections():
                 # print (per)
 
             curDate = getCurrentDate()
-            if curDate!=Date:
+            #print ("Date={}, CurDate={}".format(Date,curDate))
+            if str(curDate)!=str(Date):
                 cur.execute("UPDATE CameraDate SET processed = TRUE WHERE UID=?", (CamDateID,))
-            break
+            #break
 
         conn.commit()
         conn.close()
