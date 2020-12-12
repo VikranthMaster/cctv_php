@@ -7,12 +7,12 @@ def getPhotoTimeStamp(camID, date, file):
     if camID==1:
         base = os.path.basename(file)
         base = base.split('[')[0].replace(".", ":")
-        return str(date) + " " +base
+        return base
     else:
         file = file.split('[')[0]
         sp = file.split("/")
         time = sp[-3]+":"+sp[-2]+":"+sp[-1]
-        return str(date) + " " + time
+        return time
 
 def addDetections():
     # Connect to MariaDB Platform
@@ -49,14 +49,14 @@ def addDetections():
                     print(line)
                     sp = line.split()
                     ts = getPhotoTimeStamp(CamID, str(Date),sp[0])
-                    #print("CamDateID={}, Timestamp={}".format(CamDateID,ts))
+                    print("CamDateID={}, Timestamp={}".format(CamDateID,ts))
                     cur.execute("SELECT UID from Photo WHERE cameraDateID=? and time=?", (CamDateID,ts))
                     r = cur.fetchall()
                     cur.close()
                     cur = conn.cursor()
                     photoID = r[0][0]
-                    #print("PhotID={}".format(photoID))
-                    #print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
+                    print("PhotID={}".format(photoID))
+                    print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
                     cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(photoID, 1, sp[1], sp[2], sp[3], sp[4], sp[5]))
                 print (per)
                 break
