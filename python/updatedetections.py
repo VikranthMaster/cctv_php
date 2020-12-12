@@ -1,8 +1,7 @@
 import os
-import datetime
-import time
 import mariadb
 from shared2 import *
+from database import *
 
 def getPhotoTimeStamp(camID, date, file):
     if camID==1:
@@ -15,29 +14,26 @@ def getPhotoTimeStamp(camID, date, file):
         time = sp[-3]+":"+sp[-2]+":"+sp[-1]
         return str(date) + " " + time
 
-def addFootage():
+def addDetections():
     # Connect to MariaDB Platform
     try:
-        conn = mariadb.connect(
-            user="root",
-            password="password",
-            host="localhost",
-            port=3306,
-            database="cctv")
-    
+        conn = getDBConnection()
+
         # Get Cursor
         cur = conn.cursor()
     
         cur.execute("""
-                       select c.UID as CamID, cd.UID as CamDateID, cd.date as Date, c.cacheDir as Cache 
-                       from CameraDate as cd 
-                       join Camera as c on c.UID=cd.cameraID 
-                       order by date desc limit 2;
+                        select c.UID as cameraID, cd.UID as camDateID, d.date, c.cachedir, cd.processed
+	                    from CameraDate as cd
+                        join Date as d on cd.dateID=d.UID
+                        join Camera as c on c.UID=cd.cameraID;
 		   """)
 
         dates = []
-        for CamID, CamDateID, Date, Cache in cur:
-            dates.append((CamID, CamDateID, Date, Cache))
+        for cameraID, camDateID, date, cachedir, processed in cur:
+            if processed==1:
+                continue
+            dates.append((cameraID, camDateID, date, cachedir))
 
         r = cur.fetchall()
         cur.close()
@@ -50,7 +46,7 @@ def addFootage():
                    continue
                 f = open(per,'r')
                 for line in f.readlines():
-                    #print(line)
+                    print(line)
                     sp = line.split()
                     ts = getPhotoTimeStamp(CamID, str(Date),sp[0])
                     #print("CamDateID={}, Timestamp={}".format(CamDateID,ts))
@@ -62,12 +58,12 @@ def addFootage():
                     #print("PhotID={}".format(photoID))
                     #print("File={}, x1={}, y1={}, x2={}, y2={}, prob={}".format(sp[0],sp[1],sp[2],sp[3],sp[4],sp[5]))
                     cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(photoID, 1, sp[1], sp[2], sp[3], sp[4], sp[5]))
-                #print (per)
-                #break
+                print (per)
+                break
 
-            #break
-            #print ("UID={}, Thummpath={}".format(UID, thumbpath))
-            #cur.execute("UPDATE Photo SET thumbnail = ? WHERE UID=?",(thumbpath,UID))
+            break
+            print ("UID={}, Thummpath={}".format(UID, thumbpath))
+            # cur.execute("UPDATE Photo SET thumbnail = ? WHERE UID=?",(thumbpath,UID))
 
         conn.commit()
         conn.close()
@@ -75,4 +71,4 @@ def addFootage():
     except mariadb.Error as e:
         print("Error connecting to MariaDB Platform: {}".format(e))
 
-addFootage()
+addDetections()
