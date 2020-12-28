@@ -31,21 +31,20 @@ def addFootage():
         cur = conn.cursor()
     
         cur.execute("""
-                        select c.UID as cameraID, cd.UID as camDateID, d.date, c.rootdir, cd.fetched
+                        select c.UID as cameraID, cd.UID as camDateID, d.date, c.rootdir, c.cachedir
 	                    from CameraDate as cd
                         join Date as d on cd.dateID=d.UID
-                        join Camera as c on c.UID=cd.cameraID;
+                        join Camera as c on c.UID=cd.cameraID
+                        where cd.fetched = FALSE;
 		            """)
 
         camDates = []
-        for cameraID, camDateID, date, rootDir, fetched in cur:
-            if fetched==1:
-                continue
-            camDates.append((cameraID, camDateID, str(date), rootDir))
+        for cameraID, camDateID, date, rootDir, cacheDir in cur:
+            camDates.append((cameraID, camDateID, str(date), rootDir, cacheDir))
 
         curDate = getCurrentDate()
 
-        for camID, camDateID, date, rootDir in camDates:
+        for camID, camDateID, date, rootDir, cacheDir in camDates:
             if curDate!=date:
                 cur.execute("UPDATE CameraDate SET fetched = TRUE WHERE UID=?", (camDateID,))
                 
@@ -56,6 +55,14 @@ def addFootage():
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
+                thumbnailPath = os.path.join(cacheDir, date, str(timestamp))
+                if not os.path.exists(thumbnailPath):
+                    try:
+                        cv2_img = cv2.imread(photo)
+                        cv2_img = cv2.resize(cv2_img, (640, 360))
+                        cv2.imwrite(thumbnailPath, cv2_img)
+                    except:
+                        log_message("Error saving thumbnail:"+img)
                 cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size) values(?,?,?,?)", (camDateID, relPath, timestamp, size))
                
             for video in videos:
