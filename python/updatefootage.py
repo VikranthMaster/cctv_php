@@ -55,15 +55,17 @@ def addFootage():
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
-                thumbnailPath = os.path.join(cacheDir, date, str(timestamp))
+                thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
                     try:
                         cv2_img = cv2.imread(photo)
                         cv2_img = cv2.resize(cv2_img, (640, 360))
+                        #print ("Save {} file to {}".format(photo,thumbnailPath))
                         cv2.imwrite(thumbnailPath, cv2_img)
                     except:
-                        log_message("Error saving thumbnail:"+img)
-                cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size) values(?,?,?,?)", (camDateID, relPath, timestamp, size))
+                        log_message("Error saving thumbnail:"+photo)
+                thumbsize = os.path.getsize(thumbnailPath)
+                cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size, thumbSize) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, thumbsize))
                
             for video in videos:
                 relPath = os.path.relpath(video, os.path.join(rootDir,date))
