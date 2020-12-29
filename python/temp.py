@@ -2,6 +2,7 @@ import os
 import datetime
 from shared2 import *
 from database import *
+import shutil
 
 def getVideoTimeStamp(camID, date, file):
     base = os.path.basename(file).split('[')[0].replace(".", ":")
@@ -49,16 +50,22 @@ def addFootage():
             photos = findFiles(os.path.join(rootDir, date), "jpg")
             exist = False
             for photo in photos:
+                cam = Cameras.Gate
+                if (camID==1):
+                    Hour = photo.split("/")[0]
+                else:
+                    Hour = photo.split("/")[2]
+                    cam = Cameras.Stairs
+                thumbpath = getThumbImgPath(cam,str(date),Hour,os.path.join(rootDir,photo))
+
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
                 thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
                     try:
-                        cv2_img = cv2.imread(photo)
-                        cv2_img = cv2.resize(cv2_img, (640, 360))
-                        #print ("Save {} file to {}".format(photo,thumbnailPath))
-                        cv2.imwrite(thumbnailPath, cv2_img)
+                        print("Copy from {} to {}".format(thumbpath, thumbnailPath))
+                        shutil.copy(thumbpath,thumbnailPath)
                     except:
                         log_message("Error saving thumbnail:"+photo)
                 else:
