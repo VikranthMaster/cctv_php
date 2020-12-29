@@ -109,7 +109,7 @@ $get_bounding_box = "
                 join cctv2.Date dt on cd.dateID = dt.UID
                 join cctv2.Camera as c on c.UID = cd.cameraID
                 join cctv2.Detection as d on d.photoID=p.UID
-				where c.name = ? and dt.date=? and p.time=?;
+	        where c.name = ? and dt.date=? and p.time=?;
             ";
 
 // Get available hour for given Camera and Date.
