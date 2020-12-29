@@ -45,8 +45,9 @@ foreach($personphotos as $index => $val){
     $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
     $thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
 
-    $boxes = "";
-    echo "<canvas id='$thumb_link' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
+    $boxes = runQueryWithThreeArg($get_bounding_box, $CAMERA, $DATE, $val[3]);
+    $boxstr = $boxes[0][0];
+    echo "<canvas id='$thumb_link' boxes='$boxstr' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
 }
 ?>
 

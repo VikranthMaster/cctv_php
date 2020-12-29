@@ -101,6 +101,16 @@ $get_otherphotos_query = "
                 where c.name = ? and date = ? and hour(p.time)=? and d.objectID is NULL;
             ";
 
+// Get bounding box for a photo
+$get_bounding_box = "
+            select concat(d.x1,\" \",d.y1,\" \",d.x2,\" \",d.y2,\" \",d.probability) as Box
+                from cctv2.Photo as p
+                join cctv2.CameraDate as cd on cd.UID=cameraDateID
+                join cctv2.Date dt on cd.dateID = dt.UID
+                join cctv2.Camera as c on c.UID = cd.cameraID
+                join cctv2.Detection as d on d.photoID=p.UID
+				where c.name = ? and dt.date=? and p.time=?;
+            ";
 
 // Get available hour for given Camera and Date.
 $get_hours = "

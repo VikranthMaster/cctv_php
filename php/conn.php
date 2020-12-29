@@ -81,7 +81,7 @@ function runQueryWithTwoArg($query, $arg1, $arg2, $cols) {
 function runQueryWithThreeArg($query, $arg1, $arg2, $arg3, $cols) {
     $conn = getConn();
     $statement = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($statement, 'ssi', $arg1,$arg2, $arg3);
+    mysqli_stmt_bind_param($statement, 'sss', $arg1,$arg2, $arg3);
     mysqli_stmt_execute($statement);
     $result = mysqli_stmt_get_result($statement);
     if (is_bool($result) && (mysqli_num_rows($result) == 0)) {
