@@ -69,6 +69,39 @@ $get_photos_query = "
 	        group by hour order by hour desc;
             ";
 
+// Get All photos
+$get_allphotos_query = "
+            select c.rootdir as RootDir, c.cachedir as CacheDir , p.filepath as FilePath, p.time as Time
+                from cctv2.Photo as p
+                join cctv2.CameraDate as cd on cd.UID=cameraDateID
+                join cctv2.Date dt on cd.dateID = dt.UID
+                join cctv2.Camera as c on c.UID = cd.cameraID
+                where c.name = ? and date = ? and hour(p.time)=?;
+            ";
+
+// Get Person photos
+$get_personphotos_query = "
+            select c.rootdir as RootDir, c.cachedir as CacheDir , p.filepath as FilePath, p.time as Time
+                from cctv2.Photo as p
+                join cctv2.CameraDate as cd on cd.UID=cameraDateID
+                join cctv2.Date dt on cd.dateID = dt.UID
+                join cctv2.Camera as c on c.UID = cd.cameraID
+                join cctv2.Detection as d on d.photoID=p.UID;
+                where c.name = ? and date = ? and hour(p.time)=?;
+            ";
+
+// Get Other photos
+$get_otherphotos_query = "
+            select c.rootdir as RootDir, c.cachedir as CacheDir , p.filepath as FilePath, p.time as Time
+                from cctv2.Photo as p
+                join cctv2.CameraDate as cd on cd.UID=cameraDateID
+                join cctv2.Date dt on cd.dateID = dt.UID
+                join cctv2.Camera as c on c.UID = cd.cameraID
+                left join cctv2.Detection as d on d.photoID=p.UID;
+                where c.name = ? and date = ? and hour(p.time)=? and d.objectID is NULL;
+            ";
+
+
 // Get available hour for given Camera and Date.
 $get_hours = "
             select hour(p.time) from Photo as p
