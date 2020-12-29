@@ -57,6 +57,19 @@ $get_datetemp_query = "
                 group by Hour;
            ";
 
+// Get Photos
+$get_photos_query = "
+            select hour(p.time) as Hour, count(d.objectID) as PersonCount, count(p.filepath) as TotalCount, c.cachedir, p.time
+	            from Photo as p
+                join CameraDate as cd on cd.UID=cameraDateID
+                join Date dt on cd.dateID = dt.UID
+                join Camera as c on c.UID = cd.cameraID
+                left join Detection as d on d.photoID=p.UID
+                where c.name = ? and date = ?
+	            group by hour order by hour desc;
+
+            ";
+
 // Get available hour for given Camera and Date.
 $get_hours = "
             select hour(p.time) from Photo as p
