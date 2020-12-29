@@ -1,9 +1,16 @@
 <?php
 require 'vars.php';
 require_once('authorize.php');
+include ('conn.php');
+include ('queries.php');
+
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
 $HOUR = $_GET["hour"];
+
+$cols = array("RootDir", "CacheDir", "FilePath", "Time");
+$personphotos = runQueryWithThreeArg($get_personphotos_query, $CAMERA, $DATE, $HOUR, $cols);
+
 ?>
 
 <!DOCTYPE html>
@@ -32,25 +39,14 @@ echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?came
 $photo_dir = getCacheDir($CAMERA, $DATE, $HOUR);
 $p_images = getPersonImages($CAMERA, $DATE, $HOUR);
 
-if(file_exists("$photo_dir/person.txt")){
-    $person_file = fopen("$photo_dir/person.txt","r");
-    $cam = $CAMERA=="Gate"?"GatePhotos":"StairsPhotos";
-    while(!feof($person_file)){
-        $line = rtrim(fgets($person_file));
-//        echo $line;
-        if (strpos($line, " ") !== false) {
-            $f_name = explode(" ", $line)[0];
-            $boxes = rtrim(substr($line,strlen($f_name)+1));
+foreach($personphotos as $index => $val){
+    $img_link = $val[0]."/".$DATE."/".$val[2];
+    $img_link = ".".getRelativePath($HDD_ROOT, $img_link);
+    $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
+    $thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
 
-            $img_link = ".".getRelativePath($HDD_ROOT, $f_name);
-            $thumb_link = getThumbnailPath($CAMERA, $DATE, $HOUR, $f_name);
-            if(file_exists("$HDD_ROOT/$cam/$DATE/$HOUR/thumbnails/$f_name")){
-                $img_link = $thumb_link;
-            }
-            echo "<canvas id='$img_link' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
-        }
-    }
-    fclose($person_file);
+    $boxes = "";
+    echo "<canvas id='$thumb_link' boxes='$boxes' width='640' height='360' style='border:1px solid #d3d3d3;'></canvas>\n";
 }
 ?>
 
