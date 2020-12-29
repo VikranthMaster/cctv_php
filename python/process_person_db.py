@@ -29,13 +29,13 @@ try:
 
     photos = []
     for PhotoUID, RootDir, Date, FilePath in cur:
-        photos.append((PhotoUID, RootDir, Date, FilePath))
+        photos.append((PhotoUID, RootDir, str(Date), FilePath))
 
     for PhotoUID, RootDir, Date, FilePath in photos:
         fullpath = os.path.join(RootDir, Date, FilePath)
         if not os.path.exists(fullpath):
             continue
-        print("Running person detect on {}".format(fullpath))
+        #print("Running person detect on {}".format(fullpath))
         try:
             img = cv2.imread(fullpath)
             img = cv2.resize(img, (640, 360))
@@ -49,13 +49,16 @@ try:
             # Class 1 represents human
             if classes[i] == 1 and scores[i] > threshold:
                 label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
-                cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(PhotoUID, 1, box[1], box[2], box[3], box[4], box[5]*100))
-                print("Found person for image: {}".format(fullpath))
-        cur.execute("UPDATE Person SET processed=TRUE WHERE UID=?",(PhotoUID,))
+                #print(label)
+                cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(PhotoUID, 1, box[0], box[1], box[2], box[3], scores[i]*100))
+                #print("Found person for image: {}".format(fullpath))
+        cur.execute("UPDATE Photo SET processed=TRUE WHERE UID=?",(PhotoUID,))
 
     total_time = time.time() - start_time
     st = ("Person detect ran at %s on %d images and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),len(photos),total_time/60, total_time%60)
     print(st)
+    conn.commit()
+    conn.close()
 
 except mariadb.Error as e:
     print("Error connecting to MariaDB Platform: {}".format(e))
