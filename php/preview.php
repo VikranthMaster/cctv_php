@@ -106,7 +106,7 @@ echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
 foreach($personphotos as $index => $val){
     $img_link = $val[0]."/".$DATE."/".$val[2];
-    $img_link = ".".getRelativePath($HDD_ROOT, $fullpath);
+    $img_link = ".".getRelativePath($HDD_ROOT, $img_link);
     $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
 	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
 
