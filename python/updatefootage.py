@@ -51,6 +51,7 @@ def addFootage():
             print ("CamDateID={}, Date={}, Root={}".format(camDateID, date, rootDir))
             photos = findFiles(os.path.join(rootDir, date), "jpg")
             videos = findFiles(os.path.join(rootDir, date), "mp4")
+            ensure_dir_exists(os.path.join(cacheDir,date))
             for photo in photos:
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
