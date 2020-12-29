@@ -3,8 +3,8 @@ include ('conn.php');
 include ('queries.php');
 
 // Change below two lines to test query
-$cols = array("Camera", "Date", "PhotoCount");
-$values = runQuery($get_summary_query, $cols);
+$cols = array("Hour", "PersonCount", "TotalCount", "cachedir", "time");
+$values = runQueryWithTwoArg($get_photos_query,"Gate", "2020-12-28", $cols);
 ?>
 
 <!DOCTYPE html>

@@ -1,18 +1,11 @@
 <?php
 require 'vars.php';
-require_once ('authorize.php');
-include ('conn.php');
-include ('queries.php');
-
+require_once('authorize.php');
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
-
-$cols = array(
-    "Hour", "PersonCount", "TotalCount", "cachedir", "time"
-);
-$photos = runQuery($get_photos_query, $CAMERA, $DATE, $cols);
 $photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
-
+$date_dirs = $CAMERA=="Gate"? array_filter(glob($photo_dir."/$DATE/*"), 'is_dir') : array_filter(glob($photo_dir."/$DATE/*/jpg/*"), 'is_dir');
+arsort($date_dirs);
 ?>
 
 
@@ -71,14 +64,23 @@ if(file_exists("$photo_dir/$tmrw")) {
 }
 echo "<div style='margin: auto; width: 250px;'><a href='./photos.php?camera=$other_cam&date=$DATE'>$other_cam</a></div></h2>\n";
 
-foreach($photos as $k => $v){
-    echo $k;
-    echo $v;
+foreach($date_dirs as $k => $v){
+    $hour = basename($v);
 
-//    echo "<div class='gallery''>\n";
-//    echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
-//    echo "<div class='desc'>$hour ( $p_count / $t_count ) </div>\n";
-//    echo "</div>\n";
+    $p_images = getPersonImages($CAMERA, $DATE, $hour);
+    $o_images = getOtherImages($CAMERA, $DATE, $hour);
+
+    $p_count = count($p_images);
+    $o_count = count($o_images);
+    $t_count = $p_count + $o_count;
+
+    $thumb_link = getThumbImage($CAMERA,$DATE,$hour);
+	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
+
+    echo "<div class='gallery''>\n";
+    echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb_link alt='Cinque Terre' width='600' height='400'> </a>\n";
+    echo "<div class='desc'>$hour ( $p_count / $t_count ) </div>\n";
+    echo "</div>\n";
 }
 ?>
 
