@@ -72,10 +72,11 @@ echo "<div style='margin: auto; width: 250px;'><a href='./photos.php?camera=$oth
 
 foreach($photos as $k => $v){
     $thumb =  $v[3]."/".$DATE."/".str_replace(":","_",$v[4]).".jpg";
-    $thumb = str_replace("/mnt/hdd/tmp",".",$thumb);
+    $thumb = ".".getRelativePath($HDD_ROOT,$thumb);
+    $hour = sprintf("%02d",$v[0]);
 
     echo "<div class='gallery''>\n";
-    echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$v[0]'> <img src=$thumb alt='Cinque Terre' width='600' height='400'> </a>\n";
+    echo "<a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$hour'> <img src=$thumb alt='Cinque Terre' width='600' height='400'> </a>\n";
     echo "<div class='desc'>$v[0] ( $v[1] / $v[2] ) </div>\n";
     echo "</div>\n";
 }
