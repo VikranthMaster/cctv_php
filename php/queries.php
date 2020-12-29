@@ -86,7 +86,7 @@ $get_personphotos_query = "
                 join cctv2.CameraDate as cd on cd.UID=cameraDateID
                 join cctv2.Date dt on cd.dateID = dt.UID
                 join cctv2.Camera as c on c.UID = cd.cameraID
-                join cctv2.Detection as d on d.photoID=p.UID;
+                join cctv2.Detection as d on d.photoID=p.UID
                 where c.name = ? and date = ? and hour(p.time)=?;
             ";
 
@@ -97,7 +97,7 @@ $get_otherphotos_query = "
                 join cctv2.CameraDate as cd on cd.UID=cameraDateID
                 join cctv2.Date dt on cd.dateID = dt.UID
                 join cctv2.Camera as c on c.UID = cd.cameraID
-                left join cctv2.Detection as d on d.photoID=p.UID;
+                left join cctv2.Detection as d on d.photoID=p.UID
                 where c.name = ? and date = ? and hour(p.time)=? and d.objectID is NULL;
             ";
 

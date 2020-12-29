@@ -1,14 +1,18 @@
 <?php
 require 'vars.php';
 require_once('authorize.php');
+include ('conn.php');
+include ('queries.php');
+
+$cols = array("RootDir", "CacheDir", "FilePath", "Time");
+
 $CAMERA = $_GET["camera"];
 $DATE = $_GET["date"];
-$HOUR = $_GET["hour"];
+$HOUR = intval($_GET["hour"]);
 
-$HOUR = substr($HOUR,0,2);
-if ($CAMERA=="Gate") {
-	$HOUR = $HOUR."hour";
-}
+$allphotos = runQueryWithThreeArg($get_allphotos_query, $CAMERA, $DATE, $HOUR, $cols);
+$personphotos = runQueryWithThreeArg($get_personphotos_query, $CAMERA, $DATE, $HOUR, $cols);
+$otherphotos = runQueryWithThreeArg($get_otherphotos_query, $CAMERA, $DATE, $HOUR, $cols);
 
 ?>
 
@@ -82,35 +86,28 @@ if ($CAMERA=="Gate") {
 
 <?php
 $other_cam = $CAMERA=="Gate"? "Stairs" : "Gate";
-$int_hour = substr($HOUR,0,2);
-$prev_hour = sprintf("%'.02d",$int_hour-1);
-$next_hour = sprintf("%'.02d",$int_hour+1);
+$cur_hour = sprintf("%'.02d",$HOUR);
+$prev_hour = sprintf("%'.02d",$HOUR-1);
+$next_hour = sprintf("%'.02d",$HOUR+1);
 echo "<h2><h2>";
-if($int_hour!="00"){
+if($HOUR!=0){
     echo "<div style='float: left'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$prev_hour"."hour'> Previous</a> ($prev_hour hour)</div>\n";
 }
-if($int_hour!="23"){
+if($HOUR!=23){
     echo "<div style='float: right'><a href='./preview.php?camera=$CAMERA&date=$DATE&hour=$next_hour"."hour'> Next</a> ($next_hour hour)</div>\n";
 }
-echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$HOUR'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$HOUR'>$other_cam</a></div></h2>\n";
+echo "<div style='margin: auto; width: 250px;'><a href='./video_preview.php?camera=$CAMERA&date=$DATE&hour=$cur_hour'>Videos</a>&emsp;&emsp;<a href='./preview.php?camera=$other_cam&date=$DATE&hour=$cur_hour'>$other_cam</a></div></h2>\n";
 
-$photo_dir = $CAMERA=="Gate"? $GATE_PHOTO_DIR : $STAIRS_PHOTO_DIR;
-$photo_dir .= "/$DATE/$HOUR";
-$p_images = getPersonImages($CAMERA, $DATE, $HOUR);
-$o_images = getOtherImages($CAMERA, $DATE, $HOUR);
-$all_images = array_merge($p_images,$o_images);
-sort($all_images);
-
-
-echo "<button class='tablink' onclick=\"openPage('Persons', this, '#5DADE2')\" id='defaultOpen'>Persons (".count($p_images).")</button>\n";
-echo "<button class='tablink' onclick=\"openPage('Other', this, '#5DADE2')\">Other (".count($o_images).") </button>\n";
-echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\">All (".count($all_images).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('Persons', this, '#5DADE2')\" id='defaultOpen'>Persons (".count($personphotos).")</button>\n";
+echo "<button class='tablink' onclick=\"openPage('Other', this, '#5DADE2')\">Other (".count($otherphotos).") </button>\n";
+echo "<button class='tablink' onclick=\"openPage('All', this, '#5DADE2')\">All (".count($allphotos).") </button>\n";
 
 echo "<div id='Persons' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
-foreach($p_images as $index => $img){
-    $img_link = ".".getRelativePath($HDD_ROOT, $img);
-    $thumb_link = getThumbnailPath($CAMERA,$DATE,$HOUR,$img);
+foreach($personphotos as $index => $val){
+    $img_link = $val[0]."/".$DATE."/".$val[2];
+    $img_link = ".".getRelativePath($HDD_ROOT, $fullpath);
+    $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
 	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
 
     echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";
@@ -123,10 +120,11 @@ echo '</div>';
 
 echo "<div id='Other' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
-foreach($o_images as $index => $img){
-    $img_link = ".".getRelativePath($HDD_ROOT, $img);
-    $thumb_link = getThumbnailPath($CAMERA,$DATE,$HOUR,$img);
-	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
+foreach($otherphotos as $index => $val){
+    $img_link = $val[0]."/".$DATE."/".$val[2];
+    $img_link = ".".getRelativePath($HDD_ROOT, $fullpath);
+    $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
+    $thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
                                      
     echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";
     echo "<a href='$img_link' itemprop='contentUrl' data-size='1920x1080'> <img src='$thumb_link' itemprop='thumbnail' alt='Image description'/></a>\n";
@@ -138,10 +136,11 @@ echo '</div>';
 
 echo "<div id='All' class='tabcontent'>\n";
 echo "<div class='my-gallery' itemscope itemtype='http://schema.org/ImageGallery'>\n";
-foreach($all_images as $index => $img){
-    $img_link = ".".getRelativePath($HDD_ROOT, $img);
-    $thumb_link = getThumbnailPath($CAMERA,$DATE,$HOUR,$img);
-	$thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
+foreach($allphotos as $index => $val){
+    $img_link = $val[0]."/".$DATE."/".$val[2];
+    $img_link = ".".getRelativePath($HDD_ROOT, $fullpath);
+    $thumb_link = $val[1]."/".$DATE."/".str_replace(":","_",$val[3]).".jpg";
+    $thumb_link = ".".getRelativePath($HDD_ROOT, $thumb_link);
     
     echo "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>\n";
     echo "<a href='$img_link' itemprop='contentUrl' data-size='1920x1080'> <img src='$thumb_link' itemprop='thumbnail' alt='Image description'/></a>\n";
