@@ -5,7 +5,6 @@ from shared import *
 cam = cv2.VideoCapture("vid/test.mp4")
 
 try:
-
     # creating a folder named data
     if not os.path.exists('data'):
         os.makedirs('data')

@@ -1,4 +1,4 @@
-import os
+
 import mariadb
 from shared2 import *
 from database import *

@@ -32,11 +32,13 @@ def addFootage():
         cur = conn.cursor()
     
         cur.execute("""
-                        select c.UID as cameraID, cd.UID as camDateID, d.date, c.rootdir, c.cachedir
-	                    from CameraDate as cd
+			select c.UID as cameraID, cd.UID as camDateID, d.date, c.rootdir, c.cachedir
+                        from CameraDate as cd
+                        join Photo as p on p.cameraDateID=cd.UID
                         join Date as d on cd.dateID=d.UID
                         join Camera as c on c.UID=cd.cameraID
-                        order by date desc;
+                        where p.thumbSize is null
+                        order by date asc;
 		            """)
 
         camDates = []
@@ -50,34 +52,33 @@ def addFootage():
             photos = findFiles(os.path.join(rootDir, date), "jpg")
             exist = False
             for photo in photos:
+                relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 cam = Cameras.Gate
                 if (camID==1):
-                    Hour = photo.split("/")[0]
+                    Hour = relPath.split("/")[0]
                 else:
-                    Hour = photo.split("/")[2]
+                    Hour = relPath.split("/")[2]
                     cam = Cameras.Stairs
                 thumbpath = getThumbImgPath(cam,str(date),Hour,os.path.join(rootDir,photo))
 
-                relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
                 thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
                     try:
-                        print("Copy from {} to {}".format(thumbpath, thumbnailPath))
-                        shutil.copy(thumbpath,thumbnailPath)
-                    except:
+                        #print("Copy from {} to {}".format(thumbpath, thumbnailPath))
+                        shutil.move(thumbpath,thumbnailPath)
+                    except IOError as e:
                         log_message("Error saving thumbnail:"+photo)
+                        print(e)
                 else:
                     exist = True
                     thumbsize = os.path.getsize(thumbnailPath)
-                    break
-                cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size, thumbSize) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, thumbsize))
+                #cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size, thumbSize) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, thumbsize))
                 cur.execute("UPDATE Photo SET thumbSize=? WHERE cameraDateID=? AND time=?", (thumbsize, camDateID,timestamp))
                
             print ("{} photos added on {}".format(len(photos), date))
-            if not exist:
-                break
+            break 
 
         conn.commit()
         conn.close()

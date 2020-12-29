@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-from shared import *
-from detector import *
+from shared2 import *
 from detector import DetectorAPI
 import time
 
@@ -12,6 +11,8 @@ args = parser.parse_args()
 
 model_path = args.inference_graph_file.name
 img_path = args.input_file.name
+print("Model={}".format(model_path))
+print("Image={}".format(img_path))
 
 odapi = DetectorAPI(path_to_ckpt=model_path)
 threshold = 0.6
