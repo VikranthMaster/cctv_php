@@ -1,7 +1,7 @@
 <?php
 require_once('authorize.php');
 $LOG_ROOT = "/var/www/html/logs";
-$TEMPERATURE_LOGS = $LOG_ROOT."/temperature";
+$TEMPERATURE_LOGS = $LOG_ROOT."/person_detect";
 ?>
 
 <html>
@@ -21,9 +21,7 @@ $TEMPERATURE_LOGS = $LOG_ROOT."/temperature";
     <body>
         <table style=width:100%>
             <tr>
-                <th><h2>Process footage</h2></th>
                 <th><h2>Person Detect</h2></th>
-                <th><h2>Temperature</h2></th>
             </tr>
 
 <?php
@@ -33,17 +31,11 @@ foreach($logs as $k => $v){
     $v = basename($v);
     $date = substr($v,4,10);
     echo '<tr>';
-    if(file_exists($LOG_ROOT."/process/$v")) {
-        echo "<td><h2><a href='./logs/process/$v'> $date </a></h2></td>";
-    }else{
-        echo "<td><h2>Not Available</h2></td>";
-    }
     if(file_exists($LOG_ROOT."/person_detect/$v")){
         echo "<td><h2><a href='./logs/person_detect/$v'> $date </a></h2></td>";
     }else{
         echo "<td><h2>Not Available</h2></td>";
     }
-    echo "<td><h2><a href='./logs/temperature/$v'> $date </a></h2></td>";
     echo '</tr>';
 }
 ?>

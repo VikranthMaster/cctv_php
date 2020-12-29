@@ -4,7 +4,6 @@ from detector import DetectorAPI
 from database import *
 
 # Execution starts here...
-addMarkerLine()
 log_message("Running process_person at: " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
 
 model_path = '/home/pi/person_detect_models/latest/frozen_inference_graph.pb'
@@ -62,3 +61,5 @@ try:
 
 except mariadb.Error as e:
     print("Error connecting to MariaDB Platform: {}".format(e))
+
+addMarkerLine()
