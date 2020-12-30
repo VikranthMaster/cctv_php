@@ -30,6 +30,7 @@ try:
     for PhotoUID, RootDir, Date, FilePath in cur:
         photos.append((PhotoUID, RootDir, str(Date), FilePath))
 
+    rows = []
     for PhotoUID, RootDir, Date, FilePath in photos:
         fullpath = os.path.join(RootDir, Date, FilePath)
         if not os.path.exists(fullpath):
@@ -49,13 +50,17 @@ try:
             if classes[i] == 1 and scores[i] > threshold:
                 label = label + "%d %d %d %d %s "%(box[0],box[1],box[2],box[3],str(round(scores[i]*100, 2)))
                 #print(label)
-                cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(PhotoUID, 1, box[0], box[1], box[2], box[3], scores[i]*100))
+                rows.append((PhotoUID, 1, box[0], box[1], box[2], box[3], scores[i]*100))
                 #print("Found person for image: {}".format(fullpath))
         cur.execute("UPDATE Photo SET processed=TRUE WHERE UID=?",(PhotoUID,))
 
     total_time = time.time() - start_time
     st = ("Person detect ran at %s on %d images and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),len(photos),total_time/60, total_time%60)
     print(st)
+
+    for one, two, three, four, five, six, seven in rows:
+        cur.execute("INSERT IGNORE INTO Detection(photoID, objectID, x1, y1, x2, y2, probability) values (?,?,?,?,?,?,?)",(one, two, three, four, five, six, seven))
+
     conn.commit()
     conn.close()
 
