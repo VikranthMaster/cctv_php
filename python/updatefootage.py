@@ -29,7 +29,6 @@ def addFootage():
     
         # Get Cursor
         cur = conn.cursor()
-    
         cur.execute("""
                         select c.UID as cameraID, cd.UID as camDateID, d.date, c.rootdir, c.cachedir
 	                    from CameraDate as cd
@@ -55,9 +54,13 @@ def addFootage():
             for photo in photos:
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
+                #print("size is: {}".format(size))
+                if size<2000:
+                    continue
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
                 thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
+                    #print("Creating thumbnail: {}".format(thumbnailPath))
                     try:
                         cv2_img = cv2.imread(photo)
                         cv2_img = cv2.resize(cv2_img, (640, 360))

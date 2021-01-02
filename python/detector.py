@@ -1,5 +1,8 @@
-import tensorflow as tf
+#import tensorflow as tf
 import numpy as np
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 
 class DetectorAPI:
     def __init__(self, path_to_ckpt):
