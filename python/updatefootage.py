@@ -22,6 +22,20 @@ def getPhotoTimeStamp(camID, date, file):
         time = sp[-3]+":"+sp[-2]+":"+sp[-1]
         return time
 
+def sameImage(one, two):
+    oneImg = cv2.imread(one)
+    oneImg = cv2.resize(oneImg, (640, 360))
+    twoImg = cv2.imread(two)
+    twoImg = cv2.resize(twoImg, (640, 360))
+
+    # convert the images to grayscale
+    oneImg = cv2.cvtColor(oneImg, cv2.COLOR_BGR2GRAY)
+    twoImg = cv2.cvtColor(twoImg, cv2.COLOR_BGR2GRAY)
+
+    diff = mse(one,two)
+    if(diff<100):
+        return
+
 def addFootage():
     # Connect to MariaDB Platform
     try:
@@ -43,6 +57,7 @@ def addFootage():
 
         curDate = getCurrentDate()
 
+        todel = []
         for camID, camDateID, date, rootDir, cacheDir in camDates:
             if curDate!=date:
                 cur.execute("UPDATE CameraDate SET fetched = TRUE WHERE UID=?", (camDateID,))
@@ -51,7 +66,8 @@ def addFootage():
             photos = findFiles(os.path.join(rootDir, date), "jpg")
             videos = findFiles(os.path.join(rootDir, date), "mp4")
             ensure_dir_exists(os.path.join(cacheDir,date))
-            for photo in photos:
+            for idx in range(len(photos)):
+                photo = photos[idx]
                 relPath = os.path.relpath(photo, os.path.join(rootDir,date))
                 size = os.path.getsize(photo)
                 #print("size is: {}".format(size))
@@ -60,6 +76,10 @@ def addFootage():
                 timestamp = getPhotoTimeStamp(camID, date, relPath)
                 thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
+                    if idx > 0 and sameImage(photo, photos[idx-1]):
+                        todel.append(photo)
+                        continue
+
                     #print("Creating thumbnail: {}".format(thumbnailPath))
                     try:
                         cv2_img = cv2.imread(photo)
@@ -79,6 +99,7 @@ def addFootage():
 
             print ("{} photos added on {}".format(len(photos), date))
             print ("{} videos added on {}".format(len(videos), date))
+            print ("{} photos can be deleted".format(len(todel)))
 
         conn.commit()
         conn.close()
