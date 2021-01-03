@@ -32,9 +32,9 @@ def sameImage(one, two):
     oneImg = cv2.cvtColor(oneImg, cv2.COLOR_BGR2GRAY)
     twoImg = cv2.cvtColor(twoImg, cv2.COLOR_BGR2GRAY)
 
-    diff = mse(one,two)
-    if(diff<100):
-        return
+    diff = mse(oneImg,twoImg)
+    #print("Diff between {} and {} is {}".format(one,two,diff))
+    return (diff<120)
 
 def addFootage():
     # Connect to MariaDB Platform
@@ -78,7 +78,12 @@ def addFootage():
                 if not os.path.exists(thumbnailPath):
                     if idx > 0 and sameImage(photo, photos[idx-1]):
                         todel.append(photo)
-                        continue
+                        #print("Same as previous photo: {}".format(photo))
+                        try:
+                            os.remove(photos[idx-1])
+                            continue
+                        except Exception as error:
+                            print("Error deleting duplicate image: {}".format(photos[idx-1]))
 
                     #print("Creating thumbnail: {}".format(thumbnailPath))
                     try:
@@ -99,7 +104,7 @@ def addFootage():
 
             print ("{} photos added on {}".format(len(photos), date))
             print ("{} videos added on {}".format(len(videos), date))
-            print ("{} photos can be deleted".format(len(todel)))
+            print ("{} photos are deleted".format(len(todel)))
 
         conn.commit()
         conn.close()
