@@ -4,9 +4,10 @@ import shutil
 
 while True:
     total, used, free = shutil.disk_usage("/mnt/hdd")
-    perc = used/total
+    perc = used/total*100
     print ("Used percentage is : {}".format(perc))
-    break
+    if perc < 85:
+        break
 
     try:
         conn = getDBConnection()
@@ -31,10 +32,12 @@ while True:
                 thumbdir = os.path.join(CacheDir, Date)
                 print("Deleting: " + photodir)
                 print("Deleting: " + thumbdir)
-                shutil.rmtree(photodir)
-                shutil.rmtree(thumbdir)
+                if os.path.exists(photodir):
+                    shutil.rmtree(photodir)
+                if os.path.exists(thumbdir):
+                    shutil.rmtree(thumbdir)
             except:
-                print("Error deleting directory:"+root_dir+"/"+dt_dir)
+                print("Error deleting directory")
 
             print ("Delete Detections...")
             cur.execute("""
@@ -47,15 +50,17 @@ while True:
 
 
             print ("Delete Photos...")
-            cur.execute("delete from Photo where cameraDateID=?);", (ID,))
+            cur.execute("delete from Photo where cameraDateID=?;", (ID,))
 
             print ("Delete Video...")
-            cur.execute("delete from Video where cameraDateID=?);", (ID,))
+            cur.execute("delete from Video where cameraDateID=?;", (ID,))
 
             print ("Delete CameraDate...")
-            cur.execute("delete from CameraDate where UID=?);", (ID,))
+            cur.execute("delete from CameraDate where UID=?;", (ID,))
 
         print(camDates)
+        conn.commit()
+        conn.close()
 
     except mariadb.Error as e:
         print("Error connecting to MariaDB Platform: {}".format(e))
