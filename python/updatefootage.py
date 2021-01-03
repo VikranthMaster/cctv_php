@@ -57,7 +57,10 @@ def addFootage():
 
         curDate = getCurrentDate()
 
-        todel = []
+        deleteIndices = []
+        addPhotos = []
+        addVideos = []
+
         for camID, camDateID, date, rootDir, cacheDir in camDates:
             if curDate!=date:
                 cur.execute("UPDATE CameraDate SET fetched = TRUE WHERE UID=?", (camDateID,))
@@ -77,11 +80,10 @@ def addFootage():
                 thumbnailPath = os.path.join(cacheDir, date, str(timestamp).replace(":","_")+".jpg")
                 if not os.path.exists(thumbnailPath):
                     if idx > 0 and sameImage(photo, photos[idx-1]):
-                        todel.append(photo)
+                        deleteIndices.append(idx-1)
                         #print("Same as previous photo: {}".format(photo))
                         try:
                             os.remove(photos[idx-1])
-                            continue
                         except Exception as error:
                             print("Error deleting duplicate image: {}".format(photos[idx-1]))
 
@@ -94,17 +96,25 @@ def addFootage():
                     except:
                         log_message("Error saving thumbnail:"+photo)
                 thumbsize = os.path.getsize(thumbnailPath)
-                cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size, thumbSize) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, thumbsize))
-               
+                addPhotos.append((camDateID, relPath, timestamp, size, thumbsize))
+
             for video in videos:
                 relPath = os.path.relpath(video, os.path.join(rootDir,date))
                 size = os.path.getsize(video)
                 timestamp, duration = getVideoTimeStamp(camID, date, relPath)
-                cur.execute("INSERT IGNORE INTO Video(cameraDateID, filepath, time, size, duration) values(?,?,?,?,?)", (camDateID, relPath, timestamp, size, duration))
+                addVideos.append((camDateID, relPath, timestamp, size, duration))
 
             print ("{} photos added on {}".format(len(photos), date))
             print ("{} videos added on {}".format(len(videos), date))
-            print ("{} photos are deleted".format(len(todel)))
+            print ("{} photos are deleted".format(len(deleteIndices)))
+
+        for idx in range(len(addPhotos)):
+            if idx in deleteIndices:
+                continue
+            cur.execute("INSERT IGNORE INTO Photo(cameraDateID, filepath, time, size, thumbSize) values(?,?,?,?,?)", addPhotos[idx])
+
+        for idx in range(len(addVideos)):
+            cur.execute("INSERT IGNORE INTO Video(cameraDateID, filepath, time, size, duration) values(?,?,?,?,?)", addVideos[idx])
 
         conn.commit()
         conn.close()
