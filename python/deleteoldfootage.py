@@ -6,7 +6,7 @@ while True:
     total, used, free = shutil.disk_usage("/mnt/hdd")
     perc = used/total*100
     print ("Used percentage is : {}".format(perc))
-    if perc < 85:
+    if perc < 93:
         break
 
     try:

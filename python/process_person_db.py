@@ -31,11 +31,13 @@ try:
         photos.append((PhotoUID, RootDir, str(Date), FilePath))
 
     rows = []
+    count = 0
     for PhotoUID, RootDir, Date, FilePath in photos:
         fullpath = os.path.join(RootDir, Date, FilePath)
         if not os.path.exists(fullpath):
             continue
         #print("Running person detect on {}".format(fullpath))
+        count = count+1
         try:
             img = cv2.imread(fullpath)
             img = cv2.resize(img, (640, 360))
@@ -55,7 +57,7 @@ try:
         cur.execute("UPDATE Photo SET processed=TRUE WHERE UID=?",(PhotoUID,))
 
     total_time = time.time() - start_time
-    st = ("Person detect ran at %s on %d images and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),len(photos),total_time/60, total_time%60)
+    st = ("Person detect ran at %s on %d images and took %d minutes and %d seconds\n")%(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),count,total_time/60, total_time%60)
     print(st)
 
     for one, two, three, four, five, six, seven in rows:

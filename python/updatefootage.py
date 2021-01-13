@@ -23,6 +23,11 @@ def getPhotoTimeStamp(camID, date, file):
         return time
 
 def sameImage(one, two):
+    size1 = os.path.getsize(one)
+    size2 = os.path.getsize(two)
+    #print("size is: {}".format(size))
+    if size1<2000 or size2<2000:
+        return False
     oneImg = cv2.imread(one)
     oneImg = cv2.resize(oneImg, (640, 360))
     twoImg = cv2.imread(two)
